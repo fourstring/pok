@@ -135,7 +135,8 @@ pok_ret_t pok_partition_thread_create(uint32_t *thread_id,
   /**
    * We can create a thread only if the partition is in INIT mode
    */
-  if ((pok_partitions[partition_id].mode != POK_PARTITION_MODE_INIT_COLD) &&
+  if (!attr->dynamic_created &&
+      (pok_partitions[partition_id].mode != POK_PARTITION_MODE_INIT_COLD) &&
       (pok_partitions[partition_id].mode != POK_PARTITION_MODE_INIT_WARM)) {
     return POK_ERRNO_MODE;
   }
@@ -200,7 +201,6 @@ pok_ret_t pok_partition_thread_create(uint32_t *thread_id,
   stack_vaddr = pok_thread_stack_addr(
       partition_id, pok_partitions[partition_id].thread_index);
 
-  pok_threads[id].state = POK_STATE_RUNNABLE;
   pok_threads[id].wakeup_time = 0;
   pok_threads[id].sp = pok_space_context_create(
       partition_id, (uint32_t)attr->entry, pok_threads[id].processor_affinity,
@@ -213,6 +213,7 @@ pok_ret_t pok_partition_thread_create(uint32_t *thread_id,
   pok_threads[id].partition = partition_id;
   pok_threads[id].entry = attr->entry;
   pok_threads[id].init_stack_addr = stack_vaddr;
+  pok_threads[id].state = POK_STATE_RUNNABLE;
   *thread_id = id;
 
 #ifdef POK_NEEDS_SCHED_RMS
