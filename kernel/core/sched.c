@@ -257,7 +257,9 @@ uint32_t pok_elect_thread(uint8_t new_partition_id) {
       if (POK_CURRENT_THREAD.remaining_time_capacity > 0) {
         POK_CURRENT_THREAD.remaining_time_capacity =
             POK_CURRENT_THREAD.remaining_time_capacity - 1;
-      } else if (POK_CURRENT_THREAD.time_capacity >
+      }
+      if (POK_CURRENT_THREAD.remaining_time_capacity == 0 &&
+        POK_CURRENT_THREAD.time_capacity >
                  0) // Wait next activation only for thread
                     // with non-infinite capacity (could be
                     // infinite with value -1 <--> INFINITE_TIME_CAPACITY)
