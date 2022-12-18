@@ -26,6 +26,10 @@ extern uint8_t pok_current_partition;
 extern uint32_t current_threads[POK_CONFIG_NB_PROCESSORS];
 #define POK_SCHED_CURRENT_THREAD current_threads[pok_get_proc_id()]
 
+#ifndef POK_LAB_SCHED_RR_BUDGET
+#define POK_LAB_SCHED_RR_BUDGET 1
+#endif /* POK_LAB_SCHED_RR_BUDGET */
+
 typedef enum {
   POK_STATE_STOPPED = 0,
   POK_STATE_RUNNABLE = 1,

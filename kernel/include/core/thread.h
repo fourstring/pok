@@ -51,6 +51,7 @@ typedef struct {
   uint64_t deadline;
   int64_t time_capacity;
   int64_t remaining_time_capacity;
+  uint64_t rr_budget;
   uint64_t next_activation;
   pok_state_t state;
   uint64_t end_time;
