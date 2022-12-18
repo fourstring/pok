@@ -596,8 +596,109 @@ uint32_t pok_sched_part_static(const uint32_t index_low,
 }
 #endif // POK_NEEDS_SCHED_STATIC
 
-
 uint32_t pok_sched_part_rr(const uint32_t index_low, const uint32_t index_high,
+                                const uint32_t prev_thread,
+                                const uint32_t current_thread) {
+    uint32_t elected;
+    uint32_t from;
+    bool_t exist_one = FALSE;
+    uint8_t current_proc = pok_get_proc_id();
+    printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
+
+    if (current_thread == IDLE_THREAD) {
+        elected = (prev_thread != IDLE_THREAD) ? prev_thread : index_low;
+    } else {
+        if (pok_threads[current_thread].rr_budget > 0) {
+            pok_threads[current_thread].rr_budget--;
+        }
+        elected = current_thread;
+    }
+
+    // printf("SQY@%s elected: %d, current: %d, prev_thread: %d\n", __func__, elected, current_thread, prev_thread);
+    // printf("SQY@%s thread_id\ttime_cap\tremain_cap\tstate\n", __func__);
+    // for(uint32_t i = 0; i < index_high - index_low; i++){
+    //     uint32_t tid = index_low + i;
+    //     printf("SQY@%s %d\t%lld\t%lld\t%d\t\n", __func__, tid, pok_threads[tid].time_capacity, pok_threads[tid].remaining_time_capacity, pok_threads[tid].state);
+    // }
+
+    from = elected;
+
+    do {
+        if ((pok_threads[elected].remaining_time_capacity > 0 ||
+            pok_threads[elected].time_capacity == INFINITE_TIME_VALUE) &&
+            pok_threads[elected].state == POK_STATE_RUNNABLE &&
+            pok_threads[elected].processor_affinity == current_proc) {
+            // At least one thread can be scheduled under other conditions
+            exist_one = TRUE;
+
+            if (pok_threads[elected].rr_budget > 0) {
+                break;
+            } else {
+                pok_threads[elected].rr_budget = pok_threads[elected].weight * POK_LAB_SCHED_RR_BUDGET;
+            }
+        }
+        elected++;
+        if (elected >= index_high) {
+            elected = index_low;
+        }
+    } while (elected != from || exist_one);
+
+    if (!exist_one) {
+        elected = IDLE_THREAD;
+    }
+
+#ifdef POK_NEEDS_DEBUG
+  if (elected != current_thread &&
+      (elected != IDLE_THREAD || current_thread != IDLE_THREAD)) {
+    printf("--- scheduling partition: %d, low:%d, high:%d\n",
+           pok_current_partition, index_low, index_high);
+    uint32_t non_ready = 0;
+    if (elected == IDLE_THREAD) {
+      printf("--- Scheduling processor: %hhd\n    scheduling idle thread\n",
+             current_proc);
+      non_ready = index_high - index_low;
+    } else {
+      uint32_t first = 1;
+      printf("--- Scheduling processor: %hhd\n    scheduling thread %d "
+             "(priority "
+             "%d)\n",
+             current_proc, elected, pok_threads[elected].priority);
+      for (uint32_t i = index_low; i < index_high; i++) {
+        if (pok_threads[i].state == POK_STATE_RUNNABLE &&
+            pok_threads[i].processor_affinity == current_proc) {
+          if (i != elected) {
+            printf("%s %d (%d)", first ? "    other ready: " : ",", i,
+                   pok_threads[i].priority);
+            first = 0;
+          } else
+            printf("elected %d !!! \n", elected);
+        } else {
+          non_ready++;
+        }
+      }
+      if (!first) {
+        printf("\n");
+      }
+    }
+    if (non_ready) {
+      printf("    non-ready:");
+      uint32_t first = 1;
+      for (uint32_t i = index_low; i < index_high; i++) {
+        if (pok_threads[i].state != POK_STATE_RUNNABLE &&
+            pok_threads[i].processor_affinity == current_proc) {
+          printf("%s %d (%d/%s)", first ? "" : ",", i, pok_threads[i].priority,
+                 state_names[pok_threads[i].state]);
+          first = 0;
+        }
+      }
+      printf("\n");
+    }
+  }
+#endif
+    return elected;
+}
+
+uint32_t pok_sched_part_real_rr(const uint32_t index_low, const uint32_t index_high,
                                 const uint32_t prev_thread,
                                 const uint32_t current_thread) {
     uint32_t elected;

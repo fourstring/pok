@@ -114,6 +114,7 @@ void pok_thread_init(void) {
     pok_threads[i].remaining_time_capacity = INFINITE_TIME_VALUE;
     pok_threads[i].next_activation = 0;
     pok_threads[i].rr_budget = POK_LAB_SCHED_RR_BUDGET;
+    pok_threads[i].weight = 1;
     pok_threads[i].wakeup_time = 0;
     pok_threads[i].state = POK_STATE_STOPPED;
     pok_threads[i].processor_affinity = 0;
@@ -163,6 +164,11 @@ pok_ret_t pok_partition_thread_create(uint32_t *thread_id,
   if (attr->period > 0) {
     pok_threads[id].period = attr->period;
     pok_threads[id].next_activation = attr->period;
+  }
+
+  if (attr->weight > 0) {
+    pok_threads[id].weight = attr->weight;
+    pok_threads[id].rr_budget = pok_threads[id].rr_budget * attr->weight;
   }
 
   if (attr->deadline > 0) {
