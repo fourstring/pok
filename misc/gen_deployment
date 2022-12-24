@@ -316,7 +316,7 @@ def gen_kernel_deployment_h(fd, config):
         needs.add("LOCKOBJECTS")
         configs["NB_LOCKOBJECTS"] =  sum(lockobjects)
     for (partopt, need) in [("console", "CONSOLE"), ("timer", "TIME"), ("assert", "DEBUG"),
-                            ("assert", "SHUTDOWN"), ("shutdown", "SHUTDOWN"),
+                            ("assert", "SHUTDOWN"), ("shutdown", "SHUTDOWN"), ("timer", "GETTICK"),
                             ("threads.sleep", "THREAD_SLEEP"), ("threads.suspend", "THREAD_SUSPEND")]:
         if any_has_feature(config, "partitions.{}".format(partopt)):
             needs.add(need)
@@ -326,15 +326,36 @@ def gen_kernel_deployment_h(fd, config):
     configs["PARTITIONS_SIZE"] = c_list(option_value(config, "partitions.size", decode=to_bytes))
     partitions = option_value(config, "partitions.name")
     configs["PROGRAM_NAME"] = c_list(["{}/{}.elf".format(p, p) for p in partitions])
-    configs["SCHEDULING_NBSLOTS"] = len(option_value(config, "kernel.scheduler.slots"))
-    slots = option_value(config, "kernel.scheduler.slots.duration", decode=to_ns)
-    major_frame = get_option_or(config, "kernel.scheduler.major_frame", decode=to_ns, default=sum(slots))
-    configs["SCHEDULING_MAJOR_FRAME"] = major_frame
-    if sum(slots) > major_frame:
-        raise Exception("sum of slots times is greater than major frame")
-    configs["SCHEDULING_SLOTS"] = c_list(slots)
-    allocations = [partitions.index(n) for n in option_value(config, "kernel.scheduler.slots.partition")]
-    configs["SCHEDULING_SLOTS_ALLOCATION"] = c_list(allocations)
+    partition_sched = get_option_or(config, "kernel.partition_sched", "")
+    if partition_sched:
+        PART_PRIO_SCHED = {
+            "fp": "PART_SCHED_FP",
+            "edf": "PART_SCHED_EDF"
+        }
+        assert partition_sched in PART_PRIO_SCHED
+        needs.add("PRIO_PART_SCHED")
+        configs["PRIO_PART_SCHED"] = PART_PRIO_SCHED[partition_sched]
+        partition_periods = option_value(config, "kernel.scheduler.slots.period", decode=to_ns)
+        partition_complete_time = option_value(config, "kernel.scheduler.slots.complete_time", decode=to_ns)
+        partition_deadline = option_value(config, "kernel.scheduler.slots.deadline", decode=to_ns)
+        partition_attrs = [partition_periods, partition_complete_time, partition_deadline]
+        if partition_sched == "fp":
+            partition_priority = option_value(config, "kernel.scheduler.slots.priority")
+            partition_attrs.append(partition_priority)
+
+        configs["PARTITIONS_PRIO_ATTRS"] = c_list([c_list(attr) for attr in zip(*partition_attrs)], True)
+        # TODO: fake major frame here.
+        configs["SCHEDULING_MAJOR_FRAME"] = 0
+    else:
+        configs["SCHEDULING_NBSLOTS"] = len(option_value(config, "kernel.scheduler.slots"))
+        slots = option_value(config, "kernel.scheduler.slots.duration", decode=to_ns)
+        major_frame = get_option_or(config, "kernel.scheduler.major_frame", decode=to_ns, default=sum(slots))
+        configs["SCHEDULING_MAJOR_FRAME"] = major_frame
+        if sum(slots) > major_frame:
+            raise Exception("sum of slots times is greater than major frame")
+        configs["SCHEDULING_SLOTS"] = c_list(slots)
+        allocations = [partitions.index(n) for n in option_value(config, "kernel.scheduler.slots.partition")]
+        configs["SCHEDULING_SLOTS_ALLOCATION"] = c_list(allocations)
     processor_affinity = [format_affinity(l) for l in get_option_or(config, "partitions.processor_affinity", [i for i in range(nb_processors)])]
     configs["PROCESSOR_AFFINITY"] = c_list(processor_affinity)
     configs["PARTITIONS_NTHREADS"] = c_list(get_option_or(config, "partitions.threads.count", 1))
