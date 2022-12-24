@@ -70,20 +70,21 @@ extern void pok_port_flushall(void);
 extern void pok_port_flush_partition(uint8_t);
 #endif
 
+#if !defined (POK_NEEDS_PRIO_PART_SCHED)
 uint64_t pok_sched_slots[POK_CONFIG_SCHEDULING_NBSLOTS] =
     (uint64_t[])POK_CONFIG_SCHEDULING_SLOTS;
 uint8_t pok_sched_slots_allocation[POK_CONFIG_SCHEDULING_NBSLOTS] =
     (uint8_t[])POK_CONFIG_SCHEDULING_SLOTS_ALLOCATION;
-
 uint64_t pok_sched_next_deadline;
+uint8_t pok_sched_current_slot =
+    0; /* Which slot are we executing at this time ?*/
+#endif
+
 uint64_t pok_sched_next_major_frame;
 uint64_t pok_sched_next_flush; // variable used to handle user defined
                                // flushing period, i.e. distinct from
                                // MAF and from partition slot
                                // boundaries
-
-uint8_t pok_sched_current_slot =
-    0; /* Which slot are we executing at this time ?*/
 
 extern int spinlocks[POK_CONFIG_NB_PROCESSORS];
 
@@ -98,9 +99,10 @@ void pok_sched_init(void) {
    * We check that the total time of time frame
    * corresponds to the sum of each slot
    */
-  uint64_t total_time;
-  uint8_t slot;
   fence = barr = 0;
+#if !defined (POK_NEEDS_PRIO_PART_SCHED)
+  uint8_t slot;
+  uint64_t total_time;
 
   total_time = 0;
 
@@ -114,12 +116,17 @@ void pok_sched_init(void) {
 #endif
     pok_kernel_error(POK_ERROR_KIND_KERNEL_CONFIG);
   }
+#endif
 
-  pok_sched_current_slot = 0;
   pok_sched_next_major_frame = POK_CONFIG_SCHEDULING_MAJOR_FRAME;
-  pok_sched_next_deadline = pok_sched_slots[0];
   pok_sched_next_flush = 0;
+#if !defined (POK_NEEDS_PRIO_PART_SCHED)
   pok_current_partition = pok_sched_slots_allocation[0];
+  pok_sched_next_deadline = pok_sched_slots[0];
+  pok_sched_current_slot = 0;
+#else
+  pok_current_partition = 0;
+#endif
 }
 
 uint8_t pok_sched_get_priority_min(const pok_sched_t sched_type) {
@@ -134,13 +141,7 @@ uint8_t pok_sched_get_priority_max(const pok_sched_t sched_type) {
   return 255;
 }
 
-uint8_t pok_elect_partition() {
-  uint8_t next_partition = POK_SCHED_CURRENT_PARTITION;
-#if POK_CONFIG_NB_PARTITIONS > 1
-  uint64_t now = POK_GETTICK();
-
-  if (pok_sched_next_deadline <= now) {
-    /* Here, we change the partition */
+void pok_sched_flushports(uint64_t now) {
 #if defined(POK_NEEDS_PORTS_SAMPLING) || defined(POK_NEEDS_PORTS_QUEUEING)
 #if defined(POK_FLUSH_PERIOD)
     // Flush periodically all partition ports
@@ -161,7 +162,19 @@ uint8_t pok_elect_partition() {
       pok_port_flushall();
     }
 #endif /* defined POK_FLUSH_PERIOD || POK_NEEDS_FLUSH_ON_WINDOWS */
+#else  /* defined (POK_NEEDS_PORTS....) */
+  (void)now;
 #endif /* defined (POK_NEEDS_PORTS....) */
+}
+
+uint8_t pok_elect_partition() {
+  uint8_t next_partition = POK_SCHED_CURRENT_PARTITION;
+#if POK_CONFIG_NB_PARTITIONS > 1
+  uint64_t now = POK_GETTICK();
+  pok_sched_flushports(now);
+#if !defined (POK_NEEDS_PRIO_PART_SCHED)
+  if (pok_sched_next_deadline <= now) {
+    /* Here, we change the partition */
 
     pok_sched_current_slot =
         (pok_sched_current_slot + 1) % POK_CONFIG_SCHEDULING_NBSLOTS;
@@ -180,6 +193,9 @@ uint8_t pok_elect_partition() {
           */
     next_partition = pok_sched_slots_allocation[pok_sched_current_slot];
   }
+#else
+  next_partition = pok_partition_prio_sched(now);
+#endif /* defined (POK_NEEDS_PRIO_PART_SCHED) */
 #endif /* POK_CONFIG_NB_PARTITIONS > 1 */
 
   return next_partition;

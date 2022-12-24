@@ -82,4 +82,8 @@ void pok_sched_activate_error_thread(void);
 
 uint32_t pok_sched_get_current(uint32_t *thread_id);
 
+void pok_sched_flushports(uint64_t now);
+
+uint8_t pok_partition_prio_sched(uint64_t now);
+
 #endif /* !__POK_SCHED_H__ */

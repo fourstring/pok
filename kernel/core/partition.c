@@ -403,7 +403,11 @@ pok_ret_t pok_current_partition_get_period(uint64_t *period) {
 }
 
 pok_ret_t pok_current_partition_get_duration(uint64_t *duration) {
+#if !defined (POK_NEEDS_PRIO_PART_SCHED)
   *duration = pok_sched_slots[POK_SCHED_CURRENT_PARTITION];
+#else
+  *duration = 0;
+#endif
   return POK_ERRNO_OK;
 }
 

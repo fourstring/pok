@@ -6,6 +6,7 @@ include $(TOPDIR)/misc/mk/config.mk
 LO_TARGET=	core.lo
 
 LO_OBJS=	partition.o \
+			partition_sched.o \
 			debug.o \
 			kernel.o \
 			lockobj.o \
