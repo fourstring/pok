@@ -71,6 +71,7 @@ void pok_idle_thread_init() {
 
     pok_threads[IDLE_THREAD - i].period = INFINITE_TIME_VALUE;
     pok_threads[IDLE_THREAD - i].deadline = 0;
+    pok_threads[IDLE_THREAD - i].current_deadline = 0;
     pok_threads[IDLE_THREAD - i].time_capacity = INFINITE_TIME_VALUE;
     pok_threads[IDLE_THREAD - i].next_activation = 0;
     pok_threads[IDLE_THREAD - i].remaining_time_capacity = INFINITE_TIME_VALUE;
@@ -174,6 +175,7 @@ pok_ret_t pok_partition_thread_create(uint32_t *thread_id,
 
   if (attr->deadline > 0) {
     pok_threads[id].deadline = attr->deadline;
+    pok_threads[id].deadline = POK_GETTICK() + attr->deadline;
   }
 
   if (attr->time_capacity > 0) {

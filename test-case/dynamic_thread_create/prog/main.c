@@ -45,7 +45,7 @@ static void create_task() {
     memset(&tattr, 0, sizeof(pok_thread_attr_t));
 
     pok_thread_sleep(5000000);
-    printf("SQY@%s trace create_task\n", __func__);
+    // printf("SQY@%s trace create_task\n", __func__);
 
     tattr.period = 5 * NS_ONE_SECOND;
     tattr.time_capacity = 5;

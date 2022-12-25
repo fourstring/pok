@@ -190,7 +190,7 @@ uint8_t pok_elect_partition() {
 uint32_t pok_elect_thread(uint8_t new_partition_id) {
   uint64_t now = POK_GETTICK();
   pok_partition_t *new_partition = &(pok_partitions[new_partition_id]);
-  printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
+  // printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
 
   /*
    * We unlock all WAITING threads if the waiting time is passed
@@ -251,9 +251,9 @@ uint32_t pok_elect_thread(uint8_t new_partition_id) {
       elected = new_partition->thread_error;
       break;
     }
-    printf("SQY@%s IDLE_THREAD: %d\n", __func__, IDLE_THREAD);
-    printf("SQY@%s POK_SCHED_CURRENT_THREAD: %d, current: %d\n", __func__, POK_SCHED_CURRENT_THREAD, CURRENT_THREAD(*new_partition));
-    printf("POK_SCHED_CURRENT_THREAD: time_cap: %lld, remain_cap: %lld, state: %d\n", POK_CURRENT_THREAD.time_capacity, POK_CURRENT_THREAD.remaining_time_capacity, POK_CURRENT_THREAD.state);
+    // printf("SQY@%s IDLE_THREAD: %d\n", __func__, IDLE_THREAD);
+    printf("%s: POK_SCHED_CURRENT_THREAD: %d, current: %d\n", __func__, POK_SCHED_CURRENT_THREAD, CURRENT_THREAD(*new_partition));
+    // printf("POK_SCHED_CURRENT_THREAD: time_cap: %lld, remain_cap: %lld, state: %d\n", POK_CURRENT_THREAD.time_capacity, POK_CURRENT_THREAD.remaining_time_capacity, POK_CURRENT_THREAD.state);
     if ((POK_SCHED_CURRENT_THREAD != IDLE_THREAD) &&
         (POK_SCHED_CURRENT_THREAD != POK_CURRENT_PARTITION.thread_main) &&
         (POK_SCHED_CURRENT_THREAD != POK_CURRENT_PARTITION.thread_error)) {
@@ -267,7 +267,7 @@ uint32_t pok_elect_thread(uint8_t new_partition_id) {
                     // with non-infinite capacity (could be
                     // infinite with value -1 <--> INFINITE_TIME_CAPACITY)
       {
-        printf("SQY@%s state change to WAIT_NEXT_ACTIVATION\n", __func__);
+        // printf("SQY@%s state change to WAIT_NEXT_ACTIVATION\n", __func__);
         POK_CURRENT_THREAD.state = POK_STATE_WAIT_NEXT_ACTIVATION;
       }
     }
@@ -304,7 +304,7 @@ void pok_global_sched_thread(bool_t is_source_processor) {
 
   if (CURRENT_THREAD(pok_partitions[POK_SCHED_CURRENT_PARTITION]) !=
       elected_thread) {
-        printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
+        // printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
     if (CURRENT_THREAD(pok_partitions[POK_SCHED_CURRENT_PARTITION]) !=
         IDLE_THREAD) {
       PREV_THREAD(pok_partitions[POK_SCHED_CURRENT_PARTITION]) =
@@ -316,7 +316,7 @@ void pok_global_sched_thread(bool_t is_source_processor) {
   pok_global_sched_context_switch(elected_thread, is_source_processor);
 }
 void pok_global_sched() {
-  printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
+  // printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
   uint8_t elected_partition = POK_SCHED_CURRENT_PARTITION;
   elected_partition = pok_elect_partition();
   new_partition = elected_partition != POK_SCHED_CURRENT_PARTITION;
@@ -595,6 +595,54 @@ uint32_t pok_sched_part_static(const uint32_t index_low,
   return elected;
 }
 #endif // POK_NEEDS_SCHED_STATIC
+
+typedef int thread_comparator_fn(uint32_t t1, uint32_t t2);
+
+static uint32_t select_thread_by_property(thread_comparator_fn property_cmp, const uint32_t index_low,
+                                          const uint32_t index_high, const uint32_t prev_thread,
+                                          const uint32_t current_thread) {
+    uint32_t t, from;
+    uint32_t max_property_thread = IDLE_THREAD;
+
+    if (current_thread == IDLE_THREAD) {
+      from = t = prev_thread;
+    } else {
+      from = t = current_thread;
+    }
+
+    do {
+      if (pok_threads[t].state == POK_STATE_RUNNABLE && property_cmp(t, max_property_thread) > 0) {
+        max_property_thread = t;
+      }
+      t = index_low + (t - index_low + 1) % (index_high - index_low);
+    } while (t != from);
+
+    return max_property_thread;
+}
+
+static int priority_cmp(uint32_t t1, uint32_t t2) {
+    /* Select the thread with highest priority */
+    return pok_threads[t1].priority - pok_threads[t2].priority;
+}
+
+uint32_t pok_sched_part_prio(const uint32_t index_low, const uint32_t index_high, const uint32_t prev_thread,
+                                 const uint32_t current_thread) {
+    return select_thread_by_property(priority_cmp, index_low, index_high, prev_thread, current_thread);
+}
+
+static int deadline_cmp(uint32_t t1, uint32_t t2) {
+    /* Handle threads that don't have deadlines */
+    if (pok_threads[t1].deadline == 0) return -1;
+    if (pok_threads[t2].deadline == 0) return 1;
+    /* Select the thread with earliest deadline */
+    return pok_threads[t2].current_deadline - pok_threads[t1].current_deadline;
+}
+
+uint32_t pok_sched_part_edf(const uint32_t index_low, const uint32_t index_high, const uint32_t prev_thread,
+                                const uint32_t current_thread) {
+    return select_thread_by_property(deadline_cmp, index_low, index_high, prev_thread, current_thread);
+}
+ 
 
 uint32_t pok_sched_part_rr(const uint32_t index_low, const uint32_t index_high,
                                 const uint32_t prev_thread,
