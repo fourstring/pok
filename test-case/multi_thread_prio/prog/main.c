@@ -14,22 +14,22 @@ int main() {
     int ret;
     memset(&tattr, 0, sizeof(pok_thread_attr_t));
 
-    tattr.period = 5 * NS_ONE_SECOND;
-    tattr.time_capacity = 1;
+    tattr.period = 1000;
+    tattr.time_capacity = 100;
     tattr.priority = 99;
     tattr.entry = task;
     ret = pok_thread_create(&tid, &tattr);
     printf("[P1] pok_thread_create (1) return=%d\n", ret);
 
-    tattr.period = 5 * NS_ONE_SECOND;
-    tattr.time_capacity = 2;
+    tattr.period = 1000;
+    tattr.time_capacity = 200;
     tattr.priority = 50;
     tattr.entry = task;
     ret = pok_thread_create(&tid, &tattr);
     printf("[P1] pok_thread_create (2) return=%d\n", ret);
 
-    tattr.period = 5 * NS_ONE_SECOND;
-    tattr.time_capacity = 3;
+    tattr.period = 1000;
+    tattr.time_capacity = 300;
     tattr.priority = 20;
     tattr.entry = task;
     ret = pok_thread_create(&tid, &tattr);

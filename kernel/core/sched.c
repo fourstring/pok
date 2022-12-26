@@ -219,6 +219,7 @@ uint32_t pok_elect_thread(uint8_t new_partition_id) {
         thread->state = POK_STATE_RUNNABLE;
         thread->remaining_time_capacity = thread->time_capacity;
         thread->next_activation = thread->next_activation + thread->period;
+        thread->current_deadline = thread->next_activation + thread->deadline;
       }
     }
   }
@@ -252,14 +253,17 @@ uint32_t pok_elect_thread(uint8_t new_partition_id) {
       break;
     }
     // printf("SQY@%s IDLE_THREAD: %d\n", __func__, IDLE_THREAD);
-    printf("%s: POK_SCHED_CURRENT_THREAD: %d, current: %d\n", __func__, POK_SCHED_CURRENT_THREAD, CURRENT_THREAD(*new_partition));
+    // printf("%s: POK_SCHED_CURRENT_THREAD: %d, current: %d\n", __func__, POK_SCHED_CURRENT_THREAD, CURRENT_THREAD(*new_partition));
     // printf("POK_SCHED_CURRENT_THREAD: time_cap: %lld, remain_cap: %lld, state: %d\n", POK_CURRENT_THREAD.time_capacity, POK_CURRENT_THREAD.remaining_time_capacity, POK_CURRENT_THREAD.state);
     if ((POK_SCHED_CURRENT_THREAD != IDLE_THREAD) &&
         (POK_SCHED_CURRENT_THREAD != POK_CURRENT_PARTITION.thread_main) &&
         (POK_SCHED_CURRENT_THREAD != POK_CURRENT_PARTITION.thread_error)) {
       if (POK_CURRENT_THREAD.remaining_time_capacity > 0) {
-        POK_CURRENT_THREAD.remaining_time_capacity =
-            POK_CURRENT_THREAD.remaining_time_capacity - 1;
+        printf("Thread %u.%u running at %u\n",
+            (unsigned)pok_current_partition,
+            (unsigned)(POK_SCHED_CURRENT_THREAD - POK_CURRENT_PARTITION.thread_index_low),
+            (unsigned)now);
+        POK_CURRENT_THREAD.remaining_time_capacity -= POK_SCHED_INTERVAL;
       }
       if (POK_CURRENT_THREAD.remaining_time_capacity == 0 &&
         POK_CURRENT_THREAD.time_capacity >
@@ -268,6 +272,20 @@ uint32_t pok_elect_thread(uint8_t new_partition_id) {
                     // infinite with value -1 <--> INFINITE_TIME_CAPACITY)
       {
         // printf("SQY@%s state change to WAIT_NEXT_ACTIVATION\n", __func__);
+        if (POK_CURRENT_THREAD.deadline > 0) {
+          printf("Thread %u.%u finished at %u, deadline %s, next activation: %u\n",
+                  (unsigned)pok_current_partition,
+                  (unsigned)(POK_SCHED_CURRENT_THREAD - POK_CURRENT_PARTITION.thread_index_low),
+                  (unsigned)now,
+                  POK_CURRENT_THREAD.current_deadline >= now ? "met" : "miss",
+                  (unsigned)POK_CURRENT_THREAD.next_activation);
+        } else {
+            printf("Thread %u.%u finished at %u, next activation: %u\n",
+                    (unsigned)pok_current_partition,
+                    (unsigned)(POK_SCHED_CURRENT_THREAD - POK_CURRENT_PARTITION.thread_index_low),
+                    (unsigned)now,
+                    (unsigned)POK_CURRENT_THREAD.next_activation);
+        }
         POK_CURRENT_THREAD.state = POK_STATE_WAIT_NEXT_ACTIVATION;
       }
     }
@@ -310,6 +328,10 @@ void pok_global_sched_thread(bool_t is_source_processor) {
       PREV_THREAD(pok_partitions[POK_SCHED_CURRENT_PARTITION]) =
           CURRENT_THREAD(pok_partitions[POK_SCHED_CURRENT_PARTITION]);
     }
+    printf("Thread %u.%u scheduled at %u\n",
+                   (unsigned)POK_SCHED_CURRENT_PARTITION,
+                   (unsigned)(elected_thread - pok_partitions[POK_SCHED_CURRENT_PARTITION].thread_index_low),
+                   (unsigned)POK_GETTICK());
     CURRENT_THREAD(pok_partitions[POK_SCHED_CURRENT_PARTITION]) =
         elected_thread;
   }
@@ -601,21 +623,22 @@ typedef int thread_comparator_fn(uint32_t t1, uint32_t t2);
 static uint32_t select_thread_by_property(thread_comparator_fn property_cmp, const uint32_t index_low,
                                           const uint32_t index_high, const uint32_t prev_thread,
                                           const uint32_t current_thread) {
-    uint32_t t, from;
+    uint32_t start, iter, thread;
     uint32_t max_property_thread = IDLE_THREAD;
 
     if (current_thread == IDLE_THREAD) {
-      from = t = prev_thread;
+      start = prev_thread;
     } else {
-      from = t = current_thread;
+      start = current_thread;
     }
 
-    do {
-      if (pok_threads[t].state == POK_STATE_RUNNABLE && property_cmp(t, max_property_thread) > 0) {
-        max_property_thread = t;
+    for (iter = 0; iter < index_high - index_low; iter++) {
+      thread = (start + iter) % (index_high - index_low);
+      if (pok_threads[thread].state == POK_STATE_RUNNABLE &&
+          property_cmp(thread, max_property_thread) > 0) {
+        max_property_thread = thread;
       }
-      t = index_low + (t - index_low + 1) % (index_high - index_low);
-    } while (t != from);
+    }
 
     return max_property_thread;
 }
