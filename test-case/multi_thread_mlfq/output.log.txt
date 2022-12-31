@@ -1,0 +1,1293 @@
+[QEMU] Start
+ OK 
+c[?7l[2J[0mSeaBIOS (version 1.13.0-1ubuntu1.1)
+
+
+iPXE (http://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+07F8CA10+07ECCA10 CA00
+Press Ctrl-B to configure iPXE (PCI 00:03.0)...                                                                               
+
+
+Booting from Floppy...
+GRUB Loading stage2............[01;01H[2J
+    GNU GRUB  version 0.94  (639K lower / 129920K upper memory)[04;02H┌─────────────────────────────────────────────────────────────────────────┐[05;02H│[05;76H│[06;02H│[06;76H│[07;02H│[07;76H│[08;02H│[08;76H│[09;02H│[09;76H│[10;02H│[10;76H│[11;02H│[11;76H│[12;02H│[12;76H│[13;02H│[13;76H│[14;02H│[14;76H│[15;02H│[15;76H│[16;02H│[16;76H│[17;02H└─────────────────────────────────────────────────────────────────────────┘
+      Use the ↑ and ↓ keys to select which entry is highlighted.
+      Press enter to boot the selected OS, 'e' to edit the
+      commands before booting, or 'c' for a command-line.[05;78H [05;03H[0;30;47m PolyORB Kernel                                                          [06;03H[0m                                                                         [07;03H                                                                         [08;03H                                                                         [09;03H                                                                         [10;03H                                                                         [11;03H                                                                         [12;03H                                                                         [13;03H                                                                         [14;03H                                                                  [14;68H[14;69H       [15;03H                                                                         [16;03H                                                                         [16;78H [01;01H[2J  Booting 'PolyORB Kernel'
+
+root   (hd0,0)
+ Filesystem type is fat, partition type 0x6
+kernel /pok.elf
+   [Multiboot-elf, <0x100000:0xb73c:0x0>, <0x10b73c:0x7c:0x0>, <0x10b7b8:0x1dfc
+c:0x0>, shtab=0x12a3e8, entry=0x105efe
+Multiprocessing init
+Bus entry:
+Bus ID: 0
+Bus Type: PCI   
+
+Bus entry:
+Bus ID: 1
+Bus Type: ISA   
+
+IO APIC at fec00000
+LAPIC: b000c00 30b000c
+IO APIC interrupt:
+Type: 0
+Flags: 1
+Bus ID: 0
+Bus IRQ: 4
+APIC: 0
+IDINTin: 9
+
+IO APIC interrupt:
+Type: 0
+Flags: 1
+Bus ID: 0
+Bus IRQ: c
+APIC: 0
+IDINTin: b
+
+IO APIC interrupt:
+Type: 0
+Flags: 0
+Bus ID: 1
+Bus IRQ: 0
+APIC: 0
+IDINTin: 2
+
+IO APIC interrupt:
+Type: 0
+Flags: 0
+Bus ID: 1
+Bus IRQ: 1
+APIC: 0
+IDINTin: 1
+
+IO APIC interrupt:
+Type: 0
+Flags: 0
+Bus ID: 1
+Bus IRQ: 3
+APIC: 0
+IDINTin: 3
+
+IO APIC interrupt:
+Type: 0
+Flags: 0
+Bus ID: 1
+Bus IRQ: 4
+APIC: 0
+IDINTin: 4
+
+IO APIC interrupt:
+Type: 0
+Flags: 0
+Bus ID: 1
+Bus IRQ: 6
+APIC: 0
+IDINTin: 6
+
+IO APIC interrupt:
+Type: 0
+Flags: 0
+Bus ID: 1
+Bus IRQ: 7
+APIC: 0
+IDINTin: 7
+
+IO APIC interrupt:
+Type: 0
+Flags: 0
+Bus ID: 1
+Bus IRQ: 8
+APIC: 0
+IDINTin: 8
+
+IO APIC interrupt:
+Type: 0
+Flags: 0
+Bus ID: 1
+Bus IRQ: c
+APIC: 0
+IDINTin: c
+
+IO APIC interrupt:
+Type: 0
+Flags: 0
+Bus ID: 1
+Bus IRQ: d
+APIC: 0
+IDINTin: d
+
+IO APIC interrupt:
+Type: 0
+Flags: 0
+Bus ID: 1
+Bus IRQ: e
+APIC: 0
+IDINTin: e
+
+IO APIC interrupt:
+Type: 0
+Flags: 0
+Bus ID: 1
+Bus IRQ: f
+APIC: 0
+IDINTin: f
+
+LAPIC interrupt:
+Type: 3
+Flags: 0
+Bus ID: 1
+Bus IRQ: 0
+APIC: 0
+IDINTin: 0
+
+LAPIC interrupt:
+Type: 1
+Flags: 0
+Bus ID: 1
+Bus IRQ: 0
+APIC: ff
+IDINTin: 1
+
+POK kernel initialized
+SQY@pok_global_sched trace: 339
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 0 - 1, thread_id: 0, time_cap: -1, remain_cap: -1, state: 0
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 1 - 2 - 3 - 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 1 - 2, thread_id: 1, time_cap: 2, remain_cap: 2, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 2 - 3 - 0 - 1 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+    other ready:  1 (0)elected 2 !!! 
+, 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 2 - 3, thread_id: 2, time_cap: 4, remain_cap: 4, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 3 - 0 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+    other ready:  1 (0), 2 (0)elected 3 !!! 
+
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 3 - 4, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 2 - 3 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 4 - 5, thread_id: 1, time_cap: 2, remain_cap: 1, state: 1
+SQY@pok_elect_thread state change to WAIT_NEXT_ACTIVATION
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 3 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+elected 2 !!! 
+    other ready:  3 (0)
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 5 - 6, thread_id: 2, time_cap: 4, remain_cap: 3, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 3 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+    other ready:  2 (0)elected 3 !!! 
+
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 6 - 7, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 3 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+elected 2 !!! 
+    other ready:  3 (0)
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 7 - 8, thread_id: 2, time_cap: 4, remain_cap: 2, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 3 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 8 - 9, thread_id: 2, time_cap: 4, remain_cap: 1, state: 1
+SQY@pok_elect_thread state change to WAIT_NEXT_ACTIVATION
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 3 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+elected 3 !!! 
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation), 2 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 9 - 10, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 10 - 11, thread_id: 1, time_cap: 2, remain_cap: 2, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 1 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+    other ready:  1 (0)elected 2 !!! 
+, 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 11 - 12, thread_id: 2, time_cap: 4, remain_cap: 4, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 12 - 13, thread_id: 1, time_cap: 2, remain_cap: 1, state: 1
+SQY@pok_elect_thread state change to WAIT_NEXT_ACTIVATION
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 1 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+elected 2 !!! 
+    other ready:  3 (0)
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 13 - 14, thread_id: 2, time_cap: 4, remain_cap: 3, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+    other ready:  2 (0)elected 3 !!! 
+
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 14 - 15, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 3 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+elected 2 !!! 
+    other ready:  3 (0)
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 15 - 16, thread_id: 2, time_cap: 4, remain_cap: 2, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 3 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 16 - 17, thread_id: 2, time_cap: 4, remain_cap: 1, state: 1
+SQY@pok_elect_thread state change to WAIT_NEXT_ACTIVATION
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 3 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+elected 3 !!! 
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation), 2 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 17 - 18, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 3 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 3 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 18 - 19, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 19 - 20, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 20 - 21, thread_id: 1, time_cap: 2, remain_cap: 2, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 1 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+    other ready:  1 (0)elected 2 !!! 
+, 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 21 - 22, thread_id: 2, time_cap: 4, remain_cap: 4, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 22 - 23, thread_id: 1, time_cap: 2, remain_cap: 1, state: 1
+SQY@pok_elect_thread state change to WAIT_NEXT_ACTIVATION
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+elected 2 !!! 
+    other ready:  3 (0)
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 23 - 24, thread_id: 2, time_cap: 4, remain_cap: 3, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 24 - 25, thread_id: 2, time_cap: 4, remain_cap: 2, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 25 - 26, thread_id: 2, time_cap: 4, remain_cap: 1, state: 1
+SQY@pok_elect_thread state change to WAIT_NEXT_ACTIVATION
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+elected 3 !!! 
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation), 2 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 26 - 27, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 27 - 28, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 28 - 29, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 29 - 30, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr It's time to BOOST!
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 2 - 3 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 30 - 31, thread_id: 1, time_cap: 2, remain_cap: 2, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 3 - 1 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+    other ready:  1 (0)elected 2 !!! 
+, 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 31 - 32, thread_id: 2, time_cap: 4, remain_cap: 4, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 3 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+    other ready:  1 (0), 2 (0)elected 3 !!! 
+
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 32 - 33, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 2 - 3 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 33 - 34, thread_id: 1, time_cap: 2, remain_cap: 1, state: 1
+SQY@pok_elect_thread state change to WAIT_NEXT_ACTIVATION
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 3 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+elected 2 !!! 
+    other ready:  3 (0)
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 34 - 35, thread_id: 2, time_cap: 4, remain_cap: 3, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 3 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+    other ready:  2 (0)elected 3 !!! 
+
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 35 - 36, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 3 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+elected 2 !!! 
+    other ready:  3 (0)
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 36 - 37, thread_id: 2, time_cap: 4, remain_cap: 2, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 3 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 37 - 38, thread_id: 2, time_cap: 4, remain_cap: 1, state: 1
+SQY@pok_elect_thread state change to WAIT_NEXT_ACTIVATION
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 3 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+elected 3 !!! 
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation), 2 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 38 - 39, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 3 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 3 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 39 - 40, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 40 - 41, thread_id: 1, time_cap: 2, remain_cap: 2, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 1 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+    other ready:  1 (0)elected 2 !!! 
+, 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 41 - 42, thread_id: 2, time_cap: 4, remain_cap: 4, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 42 - 43, thread_id: 1, time_cap: 2, remain_cap: 1, state: 1
+SQY@pok_elect_thread state change to WAIT_NEXT_ACTIVATION
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 1 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+elected 2 !!! 
+    other ready:  3 (0)
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 43 - 44, thread_id: 2, time_cap: 4, remain_cap: 3, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+    other ready:  2 (0)elected 3 !!! 
+
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 44 - 45, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 45 - 46, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+elected 2 !!! 
+    other ready:  3 (0)
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 46 - 47, thread_id: 2, time_cap: 4, remain_cap: 2, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 47 - 48, thread_id: 2, time_cap: 4, remain_cap: 1, state: 1
+SQY@pok_elect_thread state change to WAIT_NEXT_ACTIVATION
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+elected 3 !!! 
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation), 2 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 48 - 49, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 49 - 50, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 50 - 51, thread_id: 1, time_cap: 2, remain_cap: 2, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 1 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+    other ready:  1 (0)elected 2 !!! 
+, 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 51 - 52, thread_id: 2, time_cap: 4, remain_cap: 4, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 52 - 53, thread_id: 1, time_cap: 2, remain_cap: 1, state: 1
+SQY@pok_elect_thread state change to WAIT_NEXT_ACTIVATION
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+elected 2 !!! 
+    other ready:  3 (0)
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 53 - 54, thread_id: 2, time_cap: 4, remain_cap: 3, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 54 - 55, thread_id: 2, time_cap: 4, remain_cap: 2, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 55 - 56, thread_id: 2, time_cap: 4, remain_cap: 1, state: 1
+SQY@pok_elect_thread state change to WAIT_NEXT_ACTIVATION
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+elected 3 !!! 
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation), 2 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 56 - 57, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 57 - 58, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 58 - 59, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 59 - 60, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr It's time to BOOST!
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 2 - 3 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 60 - 61, thread_id: 1, time_cap: 2, remain_cap: 2, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 3 - 1 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+    other ready:  1 (0)elected 2 !!! 
+, 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 61 - 62, thread_id: 2, time_cap: 4, remain_cap: 4, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 3 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+    other ready:  1 (0), 2 (0)elected 3 !!! 
+
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 62 - 63, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 2 - 3 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 63 - 64, thread_id: 1, time_cap: 2, remain_cap: 1, state: 1
+SQY@pok_elect_thread state change to WAIT_NEXT_ACTIVATION
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 3 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+elected 2 !!! 
+    other ready:  3 (0)
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 64 - 65, thread_id: 2, time_cap: 4, remain_cap: 3, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 3 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+    other ready:  2 (0)elected 3 !!! 
+
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 65 - 66, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 3 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+elected 2 !!! 
+    other ready:  3 (0)
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 66 - 67, thread_id: 2, time_cap: 4, remain_cap: 2, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 3 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 67 - 68, thread_id: 2, time_cap: 4, remain_cap: 1, state: 1
+SQY@pok_elect_thread state change to WAIT_NEXT_ACTIVATION
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 3 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+elected 3 !!! 
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation), 2 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 68 - 69, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 3 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 3 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 69 - 70, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 70 - 71, thread_id: 1, time_cap: 2, remain_cap: 2, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 1 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+    other ready:  1 (0)elected 2 !!! 
+, 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 71 - 72, thread_id: 2, time_cap: 4, remain_cap: 4, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 72 - 73, thread_id: 1, time_cap: 2, remain_cap: 1, state: 1
+SQY@pok_elect_thread state change to WAIT_NEXT_ACTIVATION
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 1 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+elected 2 !!! 
+    other ready:  3 (0)
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 73 - 74, thread_id: 2, time_cap: 4, remain_cap: 3, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+    other ready:  2 (0)elected 3 !!! 
+
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 74 - 75, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 3 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 75 - 76, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+elected 2 !!! 
+    other ready:  3 (0)
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 76 - 77, thread_id: 2, time_cap: 4, remain_cap: 2, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 77 - 78, thread_id: 2, time_cap: 4, remain_cap: 1, state: 1
+SQY@pok_elect_thread state change to WAIT_NEXT_ACTIVATION
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+elected 3 !!! 
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation), 2 (0/waiting next activation)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 78 - 79, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 79 - 80, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 2 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+SQY@pok_global_sched trace: 339
+SQY@pok_elect_thread
+    SCHED_INFO: sched_time: 80 - 81, thread_id: 1, time_cap: 2, remain_cap: 2, state: 1
+SQY@pok_sched_part_rr trace: 629, ready for queue moving. 
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 1 - 
+SQY@pok_sched_part_rr q_id: 1, queue: 
+SQY@pok_sched_part_rr q_id: 2, queue: 3 - 
+SQY@pok_sched_part_rr trace: 676
+SQY@pok_sched_part_rr q_id: 0, queue: 0 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+    other ready:  1 (0)elected 2 !!! 
+, 3 (0)
+    non-ready: 0 (1/stopped)
