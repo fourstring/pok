@@ -17,6 +17,7 @@
 
 #include <core/multiprocessing.h>
 #include <core/sched.h>
+#include <common/list.h>
 #include <errno.h>
 #include <types.h>
 
@@ -53,6 +54,9 @@ typedef struct {
   int64_t remaining_time_capacity;
   uint64_t rr_budget;
   uint64_t weight;
+  uint64_t tick;
+  struct list_head queue_node;
+  uint64_t queue_id;
   uint64_t next_activation;
   pok_state_t state;
   uint64_t end_time;

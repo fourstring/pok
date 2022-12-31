@@ -58,6 +58,8 @@ static const char *state_names[] = {
 
 extern pok_partition_t pok_partitions[];
 
+feedback_queue_t mlfq[POK_CONFIG_NB_PROCESSORS][QUEUE_NUM];
+
 /**
  * \brief The variable that contains the value of partition currently being
  * executed
@@ -102,6 +104,8 @@ void pok_sched_init(void) {
    */
   uint64_t total_time;
   uint8_t slot;
+  uint8_t proc_id;
+  uint8_t q_id;
   fence = barr = 0;
 
   total_time = 0;
@@ -115,6 +119,14 @@ void pok_sched_init(void) {
     printf("Major frame is not compliant with all time slots\n");
 #endif
     pok_kernel_error(POK_ERROR_KIND_KERNEL_CONFIG);
+  }
+
+  for (proc_id = 0; proc_id < POK_CONFIG_NB_PROCESSORS; proc_id++) {
+    for (q_id = 0; q_id < QUEUE_NUM; q_id++) {
+      init_list_head(&(mlfq[proc_id][q_id].list));
+      mlfq[proc_id][q_id].time_slice = (uint64_t[])QUEUE_TIME_SLICE[q_id];
+      mlfq[proc_id][q_id].time_allotment = (uint64_t[])QUEUE_TIME_ALLOTMENT[q_id];
+    }
   }
 
   pok_sched_current_slot = 0;
@@ -189,8 +201,9 @@ uint8_t pok_elect_partition() {
 
 uint32_t pok_elect_thread(uint8_t new_partition_id) {
   uint64_t now = POK_GETTICK();
+  static uint32_t sched_time = 0;
   pok_partition_t *new_partition = &(pok_partitions[new_partition_id]);
-  printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
+//   printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
 
   /*
    * We unlock all WAITING threads if the waiting time is passed
@@ -217,6 +230,10 @@ uint32_t pok_elect_thread(uint8_t new_partition_id) {
           (thread->next_activation <= now)) {
         assert(thread->time_capacity);
         thread->state = POK_STATE_RUNNABLE;
+        list_del(&(thread->queue_node));
+        list_append(&(thread->queue_node), &(mlfq[thread->processor_affinity][0].list));
+        thread->queue_id = 0;
+        thread->tick = 0;
         thread->remaining_time_capacity = thread->time_capacity;
         thread->next_activation = thread->next_activation + thread->period;
       }
@@ -251,9 +268,12 @@ uint32_t pok_elect_thread(uint8_t new_partition_id) {
       elected = new_partition->thread_error;
       break;
     }
-    printf("SQY@%s IDLE_THREAD: %d\n", __func__, IDLE_THREAD);
-    printf("SQY@%s POK_SCHED_CURRENT_THREAD: %d, current: %d\n", __func__, POK_SCHED_CURRENT_THREAD, CURRENT_THREAD(*new_partition));
-    printf("POK_SCHED_CURRENT_THREAD: time_cap: %lld, remain_cap: %lld, state: %d\n", POK_CURRENT_THREAD.time_capacity, POK_CURRENT_THREAD.remaining_time_capacity, POK_CURRENT_THREAD.state);
+    printf("SQY@%s\n", __func__);
+    printf("    SCHED_INFO: sched_time: %d - %d, thread_id: %d, time_cap: %lld, remain_cap: %lld, state: %d\n",
+        sched_time, sched_time + 1, POK_SCHED_CURRENT_THREAD, POK_CURRENT_THREAD.time_capacity,
+        POK_CURRENT_THREAD.remaining_time_capacity, POK_CURRENT_THREAD.state);
+    sched_time++;
+
     if ((POK_SCHED_CURRENT_THREAD != IDLE_THREAD) &&
         (POK_SCHED_CURRENT_THREAD != POK_CURRENT_PARTITION.thread_main) &&
         (POK_SCHED_CURRENT_THREAD != POK_CURRENT_PARTITION.thread_error)) {
@@ -304,7 +324,7 @@ void pok_global_sched_thread(bool_t is_source_processor) {
 
   if (CURRENT_THREAD(pok_partitions[POK_SCHED_CURRENT_PARTITION]) !=
       elected_thread) {
-        printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
+        // printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
     if (CURRENT_THREAD(pok_partitions[POK_SCHED_CURRENT_PARTITION]) !=
         IDLE_THREAD) {
       PREV_THREAD(pok_partitions[POK_SCHED_CURRENT_PARTITION]) =
@@ -597,6 +617,134 @@ uint32_t pok_sched_part_static(const uint32_t index_low,
 #endif // POK_NEEDS_SCHED_STATIC
 
 uint32_t pok_sched_part_rr(const uint32_t index_low, const uint32_t index_high,
+                                const uint32_t prev_thread,
+                                const uint32_t current_thread) {
+    uint32_t elected;
+    static uint32_t sched_time = 0;
+    uint64_t q_id, next_q_id;
+    // SQY: Fix me! this assignment operation just for avioding error from '-Werror=unused-parameter'
+    pok_thread_t *thread = &pok_threads[prev_thread];
+    bool_t exist_one = FALSE;
+    uint8_t current_proc = pok_get_proc_id();
+    printf("SQY@%s trace: %d, ready for queue moving. \r\n", __func__, __LINE__);
+
+    if (current_thread != IDLE_THREAD) {
+        q_id = pok_threads[current_thread].queue_id;
+
+        pok_threads[current_thread].tick++;
+        if (pok_threads[current_thread].tick >= mlfq[current_proc][q_id].time_allotment) {
+            // move to lower queue
+            next_q_id = q_id == (QUEUE_NUM - 1) ? q_id : q_id + 1;
+            list_del(&(pok_threads[current_thread].queue_node));
+            list_append(&(pok_threads[current_thread].queue_node), &(mlfq[current_proc][next_q_id].list));
+            pok_threads[current_thread].queue_id = next_q_id;
+            // tick is counter for time_allotment, clear here
+            pok_threads[current_thread].tick = 0;
+        } else if (pok_threads[current_thread].tick % mlfq[current_proc][q_id].time_slice == 0) {
+            // dequeue and enqueue again
+            list_del(&(pok_threads[current_thread].queue_node));
+            list_append(&(pok_threads[current_thread].queue_node), &(mlfq[current_proc][q_id].list));
+        }
+    }
+
+    sched_time++;
+    // Boost for every BOOST_INTERVAL
+    if (sched_time % BOOST_INTERVAL == 0){
+        for (q_id = 1; q_id < QUEUE_NUM; q_id++) {
+            while (!list_empty(&(mlfq[current_proc][q_id].list))) {
+                thread = container_of(mlfq[current_proc][q_id].list.next, pok_thread_t, queue_node);
+                list_del(&(thread->queue_node));
+                list_append(&(thread->queue_node), &(mlfq[current_proc][0].list));
+                thread->queue_id = 0;
+                thread->tick = 0;
+            }
+        }
+    }
+
+    for (q_id = 0; q_id < QUEUE_NUM; q_id++) {
+        printf("SQY@%s q_id: %lld, queue: ", __func__, q_id);
+        for_each_in_list(thread, pok_thread_t, queue_node, &(mlfq[current_proc][q_id].list)) {
+            printf("%d - ", thread - pok_threads);
+        }
+        printf("\n");
+    }
+
+    printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
+    for (q_id = 0; q_id < QUEUE_NUM; q_id++) {
+        printf("SQY@%s q_id: %lld, queue: ", __func__, q_id);
+        for_each_in_list(thread, pok_thread_t, queue_node, &(mlfq[current_proc][q_id].list)) {
+            printf("%d - ", thread - pok_threads);
+            if ((thread->remaining_time_capacity > 0 ||
+                thread->time_capacity == INFINITE_TIME_VALUE) &&
+                thread->state == POK_STATE_RUNNABLE) {
+                // At least one thread can be scheduled under other conditions
+                exist_one = TRUE;
+                elected = thread - pok_threads;
+                break;
+            }
+        }
+        printf("\n");
+        if (exist_one) {
+            break;
+        }
+    }
+
+    if (!exist_one) {
+        elected = IDLE_THREAD;
+    }
+
+#ifdef POK_NEEDS_DEBUG
+  if (elected != current_thread &&
+      (elected != IDLE_THREAD || current_thread != IDLE_THREAD)) {
+    printf("--- scheduling partition: %d, low:%d, high:%d\n",
+           pok_current_partition, index_low, index_high);
+    uint32_t non_ready = 0;
+    if (elected == IDLE_THREAD) {
+      printf("--- Scheduling processor: %hhd\n    scheduling idle thread\n",
+             current_proc);
+      non_ready = index_high - index_low;
+    } else {
+      uint32_t first = 1;
+      printf("--- Scheduling processor: %hhd\n    scheduling thread %d "
+             "(priority "
+             "%d)\n",
+             current_proc, elected, pok_threads[elected].priority);
+      for (uint32_t i = index_low; i < index_high; i++) {
+        if (pok_threads[i].state == POK_STATE_RUNNABLE &&
+            pok_threads[i].processor_affinity == current_proc) {
+          if (i != elected) {
+            printf("%s %d (%d)", first ? "    other ready: " : ",", i,
+                   pok_threads[i].priority);
+            first = 0;
+          } else
+            printf("elected %d !!! \n", elected);
+        } else {
+          non_ready++;
+        }
+      }
+      if (!first) {
+        printf("\n");
+      }
+    }
+    if (non_ready) {
+      printf("    non-ready:");
+      uint32_t first = 1;
+      for (uint32_t i = index_low; i < index_high; i++) {
+        if (pok_threads[i].state != POK_STATE_RUNNABLE &&
+            pok_threads[i].processor_affinity == current_proc) {
+          printf("%s %d (%d/%s)", first ? "" : ",", i, pok_threads[i].priority,
+                 state_names[pok_threads[i].state]);
+          first = 0;
+        }
+      }
+      printf("\n");
+    }
+  }
+#endif
+    return elected;
+}
+
+uint32_t pok_sched_part_wrr(const uint32_t index_low, const uint32_t index_high,
                                 const uint32_t prev_thread,
                                 const uint32_t current_thread) {
     uint32_t elected;
