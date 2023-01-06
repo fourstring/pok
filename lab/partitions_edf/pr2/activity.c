@@ -27,7 +27,6 @@ void *timing_job() {
   pok_ret_t ret;
   pok_time_t ns;
   while (1) {
-    printf("P2T1: fuck!\n");
     ret = pok_time_get(&ns);
     assert(ret == POK_ERRNO_OK);
     printf("P2T1: now %llu ns, %llu s\n", ns, ns / SECOND_NS);

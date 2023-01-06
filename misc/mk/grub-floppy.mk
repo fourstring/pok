@@ -163,6 +163,7 @@ endif
 # COMMON STUFF #
 ################
 
+QEMU_MISC += -serial stdio
 launch-run:
 	$(CP) $(POK_PATH)/misc/grub-boot-only.img ./
 	$(ECHO) $(ECHO_FLAGS) "[QEMU] Start"
