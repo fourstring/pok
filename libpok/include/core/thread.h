@@ -30,10 +30,12 @@ typedef struct {
   uint8_t processor_affinity;
   void *entry; /* entrypoint of the thread  */
   uint64_t period;
+  uint64_t weight;
   uint64_t deadline;
   uint64_t time_capacity;
   uint32_t stack_size;
   uint32_t state;
+  bool_t dynamic_created;
 } pok_thread_attr_t;
 
 void pok_thread_init(void);
