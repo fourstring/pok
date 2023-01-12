@@ -2,10 +2,12 @@
 #include <core/sched.h>
 #include <libc.h>
 
+#if defined (POK_CONFIG_PRIO_PART_SCHED)
+
 #define PART_SCHED_FP 1
 #define PART_SCHED_EDF 2
 
-#if defined (POK_NEEDS_DEBUG)
+#if defined (POK_NEEDS_DEBUG_PART_PRIO)
 #define debug_log(format, ...) printf("[DEBUG] %s,%d: " format, __func__, __LINE__, ##__VA_ARGS__)
 #else
 #define debug_log(...)
@@ -247,3 +249,5 @@ uint8_t pok_partition_prio_sched(uint64_t now) {
     return POK_SCHED_CURRENT_PARTITION;
 #endif
 }
+
+#endif

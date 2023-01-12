@@ -98,6 +98,7 @@ typedef struct {
 
   uint16_t max_value;
   /* For a semaphore, the maximum cap value */
+  uint8_t ceiling_value;
 } pok_lockobj_t;
 
 typedef enum {

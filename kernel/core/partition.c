@@ -50,6 +50,7 @@ extern uint64_t partition_processor_affinity[];
  */
 void pok_partition_setup_scheduler(const uint8_t pid) {
 #ifdef POK_CONFIG_PARTITIONS_SCHEDULER
+  printf("pid=%u, scheduler=%u\n", pid, ((pok_sched_t[])POK_CONFIG_PARTITIONS_SCHEDULER)[pid]);
   switch (((pok_sched_t[])POK_CONFIG_PARTITIONS_SCHEDULER)[pid]) {
 #ifdef POK_NEEDS_SCHED_RMS
   case POK_SCHED_RMS:

@@ -38,6 +38,9 @@
 
 pok_lockobj_t pok_partitions_lockobjs[POK_CONFIG_NB_LOCKOBJECTS + 1];
 
+#if defined (POK_NEEDS_PRIO_CEILING)
+uint8_t pok_lockobjs_ceiling_values[POK_CONFIG_NB_LOCKOBJECTS] = POK_CONFIG_LOCKOBJ_CEILINGS;
+#endif
 /**
  * Init the array of lockobjects
  */
@@ -61,6 +64,10 @@ pok_ret_t pok_lockobj_init() {
     pok_partitions_lockobjs[i].spin = 0;
     pok_partitions_lockobjs[i].current_value = 1;
     pok_partitions_lockobjs[i].initialized = FALSE;
+#if defined (POK_NEEDS_PRIO_CEILING)
+    printf("[DEBUG] set lock obj %u ceiling_value to %u\n", i, pok_lockobjs_ceiling_values[i]);
+    pok_partitions_lockobjs[i].ceiling_value = pok_lockobjs_ceiling_values[i];
+#endif
   }
 #endif
   return POK_ERRNO_OK;
@@ -248,6 +255,18 @@ pok_ret_t pok_lockobj_eventbroadcast(pok_lockobj_t *obj) {
   return POK_ERRNO_OK;
 }
 
+#if defined (POK_NEEDS_PRIO_CEILING)
+static void pok_lockobj_ceil_current_thread(pok_lockobj_t *obj) {
+  pok_threads[POK_SCHED_CURRENT_THREAD].priority = 100;
+  printf("[DEBUG] ceil priority of thread %u to %u, original=%u\n", POK_SCHED_CURRENT_THREAD, obj->ceiling_value, pok_threads[POK_SCHED_CURRENT_THREAD].base_priority);
+}
+
+static void pok_lockobj_unceil_current_thread() {
+  pok_threads[POK_SCHED_CURRENT_THREAD].priority = pok_threads[POK_SCHED_CURRENT_THREAD].base_priority;
+  printf("[DEBUG] unceil priority of thread %u\n", POK_SCHED_CURRENT_THREAD);
+}
+#endif
+
 pok_ret_t pok_lockobj_lock(pok_lockobj_t *obj,
                            const pok_lockobj_lockattr_t *attr) {
   if (obj->initialized == FALSE) {
@@ -259,6 +278,9 @@ pok_ret_t pok_lockobj_lock(pok_lockobj_t *obj,
     // Short path: object is available right now
     assert(pok_lockobj_fifo_is_empty(&obj->fifo));
     obj->current_value--;
+#if defined (POK_NEEDS_PRIO_CEILING)
+    pok_lockobj_ceil_current_thread(obj);
+#endif
     SPIN_UNLOCK(obj->spin);
     return POK_ERRNO_OK;
   } else {
@@ -280,6 +302,9 @@ pok_ret_t pok_lockobj_lock(pok_lockobj_t *obj,
       SPIN_UNLOCK(obj->spin);
       return POK_ERRNO_TIMEOUT;
     } else {
+#if defined (POK_NEEDS_PRIO_CEILING)
+      pok_lockobj_ceil_current_thread(obj);
+#endif
       SPIN_UNLOCK(obj->spin);
       return POK_ERRNO_OK;
     }
@@ -305,6 +330,9 @@ pok_ret_t pok_lockobj_unlock(pok_lockobj_t *obj,
    *     - Scenario 3: no resources are available prior to the unlock and
    *                   at least one thread is blocked waiting for a resource
    */
+#if defined (POK_NEEDS_PRIO_CEILING)
+    pok_lockobj_unceil_current_thread();
+#endif
 
   if (obj->current_value) {
     /*
