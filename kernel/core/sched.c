@@ -269,7 +269,7 @@ uint32_t pok_elect_thread(uint8_t new_partition_id) {
       elected = new_partition->thread_error;
       break;
     }
-    printf("SQY@%s\n", __func__);
+    // printf("SQY@%s\n", __func__);
     printf("    SCHED_INFO: sched_time: %d - %d, thread_id: %d, time_cap: %lld, remain_cap: %lld, state: %d\n",
         sched_time, sched_time + 1, POK_SCHED_CURRENT_THREAD, POK_CURRENT_THREAD.time_capacity,
         POK_CURRENT_THREAD.remaining_time_capacity, POK_CURRENT_THREAD.state);
@@ -568,7 +568,7 @@ uint32_t pok_sched_part_static(const uint32_t index_low,
   int32_t max_prio = -1;
   uint32_t max_thread = current_thread;
   uint8_t current_proc = pok_get_proc_id();
-  printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
+//   printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
 
   if (prev_thread == IDLE_THREAD)
     from = index_low;
@@ -822,7 +822,7 @@ uint32_t pok_sched_part_wrr(const uint32_t index_low, const uint32_t index_high,
     uint32_t from;
     bool_t exist_one = FALSE;
     uint8_t current_proc = pok_get_proc_id();
-    printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
+    // printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
 
     if (current_thread == IDLE_THREAD) {
         elected = (prev_thread != IDLE_THREAD) ? prev_thread : index_low;
@@ -924,7 +924,7 @@ uint32_t pok_sched_part_real_rr(const uint32_t index_low, const uint32_t index_h
     uint32_t from;
     bool_t exist_one = FALSE;
     uint8_t current_proc = pok_get_proc_id();
-    printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
+    // printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
 
     if (current_thread == IDLE_THREAD) {
         elected = (prev_thread != IDLE_THREAD) ? prev_thread : index_low;
@@ -1025,7 +1025,7 @@ uint32_t pok_sched_part_origin_rr(const uint32_t index_low, const uint32_t index
   uint32_t elected;
   uint32_t from;
   uint8_t current_proc = pok_get_proc_id();
-  printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
+//   printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
 
   if (current_thread == IDLE_THREAD) {
     elected = (prev_thread != IDLE_THREAD) ? prev_thread : index_low;
@@ -1040,7 +1040,7 @@ uint32_t pok_sched_part_origin_rr(const uint32_t index_low, const uint32_t index
       (pok_threads[current_thread].state == POK_STATE_RUNNABLE) &&
       (pok_threads[current_thread].processor_affinity == current_proc) &&
       current_thread != IDLE_THREAD) {
-        printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
+        // printf("SQY@%s trace: %d\r\n", __func__, __LINE__);
     return current_thread;
   }
 
