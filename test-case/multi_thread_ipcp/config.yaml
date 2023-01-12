@@ -1,0 +1,36 @@
+#                               POK header
+#
+# The following file is a part of the POK project. Any modification should
+# be made according to the POK licence. You CANNOT use this file or a part
+# of a file for your own project.
+#
+# For more information on the POK licence, please see our LICENCE FILE
+#
+# Please follow the coding guidelines described in doc/CODING_GUIDELINES
+#
+#                                      Copyright (c) 2007-2022 POK team
+
+target:
+    arch: x86
+    bsp: x86-qemu
+
+partitions:
+    - name: pr1
+      features: [timer, console, libc, assert]
+      prio_ceiling: true
+      mutexes:
+          - ceiling: 100
+      scheduler: prio
+      threads:
+          count: 4
+          features: [sleep, suspend]
+      size: 130kB
+      objects: ["main.o", "activity.o"]
+
+kernel:
+    features: [debug]
+    scheduler:
+        major_frame: 1000s
+        slots:
+            - partition: pr1
+              duration: 1000s
