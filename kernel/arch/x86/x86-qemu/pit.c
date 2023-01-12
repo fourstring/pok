@@ -39,6 +39,7 @@ static uint32_t NS_QUANTUM;
 #define PIT_BASE 0x40
 #define PIT_IRQ 0
 
+#if defined (POK_CONFIG_SCHED_BY_TICK)
 static uint64_t pok_prev_tick_value;
 
 INTERRUPT_HANDLER(pit_interrupt) {
@@ -52,6 +53,21 @@ INTERRUPT_HANDLER(pit_interrupt) {
     pok_global_sched();
   }
 }
+#else
+INTERRUPT_HANDLER(pit_interrupt) {
+
+  static uint32_t quantum_counter;
+  (void)frame;
+  pok_pic_eoi(PIT_IRQ);
+
+  pok_tick_counter += NS_INCREMENT;
+  quantum_counter += NS_INCREMENT;
+  if (quantum_counter >= NS_QUANTUM) {
+    quantum_counter -= NS_QUANTUM;
+    pok_global_sched();
+  }
+}
+#endif
 
 pok_ret_t pok_x86_qemu_timer_init() {
   // OSCILLATOR_DIVISOR, NS_INCREMENT and NS_QUANTUM are constants;
