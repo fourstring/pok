@@ -309,24 +309,35 @@ def gen_kernel_deployment_h(fd, config):
     configs = {"NB_PROCESSORS": nb_processors,"NB_PARTITIONS": len(option_value(config, "partitions")),
                "NB_THREADS": sum_option(config, "partitions.threads.count") + nb_processors + 1}
     semaphores = get_option_or(config, "partitions.semaphores", 0)
-    mutexes = get_option_or(config, "partitions.mutexes", 0)
+    mutexes = get_option_or(config, "partitions.mutexes", [])
+    mutexes = [len(m) for m in mutexes]
     events = get_option_or(config, "partitions.events", 0)
     lockobjects = add_lists([semaphores, mutexes, events])
+    prio_ceiling = get_option_or(config, "partitions.prio_ceiling", 0)
     if sum(lockobjects):
         needs.add("LOCKOBJECTS")
-        configs["NB_LOCKOBJECTS"] =  sum(lockobjects)
+        configs["NB_LOCKOBJECTS"] = sum(lockobjects)
+        if any(prio_ceiling):
+            needs.add("PRIO_CEILING")
+            ceiling_values = get_option_or(config, "partitions.mutexes.ceiling", 0)
+            configs["LOCKOBJ_CEILINGS"] = c_list(*ceiling_values)
     for (partopt, need) in [("console", "CONSOLE"), ("timer", "TIME"), ("assert", "DEBUG"),
                             ("assert", "SHUTDOWN"), ("shutdown", "SHUTDOWN"), ("timer", "GETTICK"),
-                            ("threads.sleep", "THREAD_SLEEP"), ("threads.suspend", "THREAD_SUSPEND")]:
+                            ("threads.sleep", "THREAD_SLEEP"), ("threads.suspend", "THREAD_SUSPEND"),]:
         if any_has_feature(config, "partitions.{}".format(partopt)):
             needs.add(need)
-    for (opt, need) in [("assert", "ASSERT"),("debug", "DEBUG")]:
+    for (opt, need) in [("assert", "ASSERT"),("debug", "DEBUG"),
+                        ("debug_rr","DEBUG_THREAD_RR"),("debug_prio","DEBUG_THREAD_PRIO"),
+                        ("debug_part","DEBUG_PART_PRIO")]:
         if has_feature(config, "kernel.{}".format(opt)):
             needs.add(need)
     configs["PARTITIONS_SIZE"] = c_list(option_value(config, "partitions.size", decode=to_bytes))
     partitions = option_value(config, "partitions.name")
     configs["PROGRAM_NAME"] = c_list(["{}/{}.elf".format(p, p) for p in partitions])
     partition_sched = get_option_or(config, "kernel.partition_sched", "")
+    sched_by = get_option_or(config, "kernel.sched_by", "ns")
+    if sched_by == "tick":
+        configs["SCHED_BY_TICK"] = 1
     if partition_sched:
         PART_PRIO_SCHED = {
             "fp": "PART_SCHED_FP",
@@ -361,8 +372,8 @@ def gen_kernel_deployment_h(fd, config):
     configs["PARTITIONS_NTHREADS"] = c_list(get_option_or(config, "partitions.threads.count", 1))
     configs["PARTITIONS_NLOCKOBJECTS"] = c_list(lockobjects)
     schedulers = [v.upper() for v in get_option_or(config, "partitions.scheduler", "rr")]
-    if any(scheduler not in ["RR", "RMS", "STATIC"] for scheduler in schedulers):
-        raise Exception("only RR, STATIC and RMS schedulers are implemented right now")
+    if any(scheduler not in ["RR", "RMS", "STATIC", "EDF", "PRIO"] for scheduler in schedulers):
+        raise Exception("only RR, STATIC, EDF, PRIO and RMS schedulers are implemented right now")
     non_rr = set(scheduler for scheduler in schedulers if scheduler != "RR")
     if non_rr:
         for scheduler in non_rr:
