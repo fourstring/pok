@@ -866,7 +866,7 @@ uint32_t pok_sched_part_wrr(const uint32_t index_low, const uint32_t index_high,
         elected = IDLE_THREAD;
     }
 
-#ifdef POK_NEEDS_DEBUG
+#if 0
   if (elected != current_thread &&
       (elected != IDLE_THREAD || current_thread != IDLE_THREAD)) {
     printf("--- scheduling partition: %d, low:%d, high:%d\n",
@@ -968,7 +968,7 @@ uint32_t pok_sched_part_real_rr(const uint32_t index_low, const uint32_t index_h
         elected = IDLE_THREAD;
     }
 
-#ifdef POK_NEEDS_DEBUG
+#if 0
   if (elected != current_thread &&
       (elected != IDLE_THREAD || current_thread != IDLE_THREAD)) {
     printf("--- scheduling partition: %d, low:%d, high:%d\n",
