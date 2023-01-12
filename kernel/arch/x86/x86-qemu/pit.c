@@ -39,16 +39,16 @@ static uint32_t NS_QUANTUM;
 #define PIT_BASE 0x40
 #define PIT_IRQ 0
 
+static uint64_t pok_prev_tick_value;
+
 INTERRUPT_HANDLER(pit_interrupt) {
 
-  static uint32_t quantum_counter;
   (void)frame;
   pok_pic_eoi(PIT_IRQ);
 
-  pok_tick_counter += NS_INCREMENT;
-  quantum_counter += NS_INCREMENT;
-  if (quantum_counter >= NS_QUANTUM) {
-    quantum_counter -= NS_QUANTUM;
+  pok_tick_counter += 1;
+  if (pok_tick_counter - pok_prev_tick_value >= POK_SCHED_INTERVAL) {
+        pok_prev_tick_value = pok_tick_counter;
     pok_global_sched();
   }
 }

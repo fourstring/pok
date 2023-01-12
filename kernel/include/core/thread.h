@@ -50,6 +50,7 @@ typedef struct {
   uint8_t priority;
   int64_t period;
   uint64_t deadline;
+  uint64_t current_deadline;
   int64_t time_capacity;
   int64_t remaining_time_capacity;
   uint64_t rr_budget;
