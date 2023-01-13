@@ -24,19 +24,20 @@ extern uint8_t mid;
 uint8_t val;
 
 void fake_job(char *name, pok_time_t time, pok_time_t report_interval) {
-  pok_time_t start, now, last_report;
+  pok_time_t start, now, last_report, runned = 0;
   pok_ret_t ret;
 
   ret = pok_time_get(&start);
   assert(ret == POK_ERRNO_OK);
   now = last_report = start;
 
-  while (now - start < time) {
+  while (runned < time) {
     ret = pok_time_get(&now);
     assert(ret == POK_ERRNO_OK);
     if (now - last_report > report_interval) {
       printf("%s: I'm alive at %llu\n", name, now);
       last_report = now;
+      runned += report_interval;
     }
   }
 }
