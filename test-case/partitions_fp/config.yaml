@@ -18,7 +18,7 @@ partitions:
     - name: pr1
       features: [timer, console, libc, assert]
       semaphores: 1
-      scheduler: static
+      scheduler: rr
       threads:
           count: 2
           features: [sleep, suspend]
@@ -26,24 +26,24 @@ partitions:
       objects: ["main.o", "activity.o"]
     - name: pr2
       features: [timer, console, libc, assert]
-      scheduler: static
+      scheduler: rr
       threads:
           count: 2
       size: 130kB
       objects: ["main.o", "activity.o"]
 
 kernel:
-    features: [debug, debug_part]
+    features: [debug]
     partition_sched: fp
     scheduler:
         slots:
             - partition: pr1
-              period: 10s
-              complete_time: 4s
-              deadline: 10s
+              period: 3s
+              complete_time: 2s
+              deadline: 3s
               priority: 1
             - partition: pr2
-              period: 2s
+              period: 3s
               complete_time: 1s
-              deadline: 2s
+              deadline: 3s
               priority: 2

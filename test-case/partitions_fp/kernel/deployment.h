@@ -4,8 +4,6 @@
 #ifndef __POK_KERNEL_GENERATED_DEPLOYMENT_H_
 #define __POK_KERNEL_GENERATED_DEPLOYMENT_H_
 
-#include <core/schedvalues.h>
-
 #define POK_CONFIG_NB_LOCKOBJECTS 1
 #define POK_CONFIG_NB_PARTITIONS 2
 #define POK_CONFIG_NB_PROCESSORS 1
@@ -16,12 +14,10 @@
   { 2, 2 }
 #define POK_CONFIG_PARTITIONS_PRIO_ATTRS                                       \
   {                                                                            \
-    {10000000000, 4000000000, 10000000000, 1}, {                               \
-      2000000000, 1000000000, 2000000000, 2                                    \
+    {3000000000, 2000000000, 3000000000, 1}, {                                 \
+      3000000000, 1000000000, 3000000000, 2                                    \
     }                                                                          \
   }
-#define POK_CONFIG_PARTITIONS_SCHEDULER                                        \
-  { POK_SCHED_STATIC, POK_SCHED_STATIC }
 #define POK_CONFIG_PARTITIONS_SIZE                                             \
   { 133120, 133120 }
 #define POK_CONFIG_PRIO_PART_SCHED PART_SCHED_FP
@@ -33,11 +29,9 @@
 
 #define POK_NEEDS_CONSOLE 1
 #define POK_NEEDS_DEBUG 1
-#define POK_NEEDS_DEBUG_PART_PRIO 1
 #define POK_NEEDS_GETTICK 1
 #define POK_NEEDS_LOCKOBJECTS 1
 #define POK_NEEDS_PRIO_PART_SCHED 1
-#define POK_NEEDS_SCHED_STATIC 1
 #define POK_NEEDS_SHUTDOWN 1
 #define POK_NEEDS_THREAD_SLEEP 1
 #define POK_NEEDS_THREAD_SUSPEND 1

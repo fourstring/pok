@@ -18,7 +18,6 @@ partitions:
     - name: pr1
       features: [timer, console, libc, assert]
       semaphores: 1
-      scheduler: static
       threads:
           count: 2
           features: [sleep, suspend]
@@ -38,14 +37,14 @@ partitions:
       objects: ["main.o", "activity.o"]
 
 kernel:
-    features: [debug_part]
+    features: [debug]
     partition_sched: edf
     scheduler:
         slots:
             - partition: pr1
-              period: 5s
+              period: 6s
               complete_time: 1s
-              deadline: 5s
+              deadline: 6s
             - partition: pr2
               period: 4s
               complete_time: 2s
