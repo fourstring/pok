@@ -38,4 +38,4 @@
 
 #include <core/schedvalues.h>
 #define POK_CONFIG_PARTITIONS_SCHEDULER \
-    { POK_SCHED_RR }
+    { POK_SCHED_MLFQ }
