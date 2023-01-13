@@ -319,3 +319,203 @@ Thread 0.3 running at 5320
 可以看到`thread 0.2`在第一次被调度后立即进入睡眠，只剩`thread 0.1`独自运行，在`thread 0.1`的time-capacity用完后，idle线程（即`thread 0.4`）开始运行直到周期结束。
 
 直到5s后（`5000 ticks`），`thread 0.2`醒来被调度，然后创建了`thread 0.3`开始运行、参与调度。之后的运行特征均与 Round-Robin调度相同，`thread 0.1`，`thread 0.2`，`thread 0.3`交替运行，详情请看`output.log.txt`。
+
+## 3 多级反馈队列调度算法
+
+### 3.1 使用 Python 实现的 MLFQ 算法模拟简述
+
+### 3.2 在 POK 中支持 MLFQ 调度策略
+
+我们用示例场景测试了调度实现的正确性，该示例与设计报告中相同。我们认为该示例能体现调度效果，即保证短任务的优先执行以达到较短的周转时间，按时提高所有任务优先级以应对任务类型的动态变化：
+
+![list](./images/mlfq.jpeg)
+
+以上示例场景中共有三个任务，任务1、2、3在图中分别用黑色、蓝色和红色表示。其中任务1、2为周期性任务，周期为10s，任务1完成需要的时间为2s，任务2完成需要4s。任务3为长期批处理任务。
+
+图中描述了各任务所在的队列及执行情况，开始时，任务1、2、3均处在最高优先级队列（即队列0），以RR方式执行两轮后，任务1完成，任务2、3进入队列1执行，任务2执行一个轮转时间片后也完成。在10s时，任务1、2在新的周期进入调度，以RR方式执行，两轮后任务1结束，任务2进入队列1。任务3在此后才被调度，再执行一个轮转时间片后进入队列2（最低优先级）。直到30s时，触发Boost，所有任务又重新进入队列0中。
+
+而在POK中，由于创建所有其他线程的主任务也要在最初参与调度，占用两个调度时间片，因此对应设置下的调度情况应为：
+
+![list](./images/mlfq_test.jpeg)
+
+我们的测试在`test-case/multi_thread_mlfq`中实现。完整示例输出在该目录下保存为`output.log.txt`。
+
+在分区启动阶段，创建三个线程，分别配置为（由于调度时间片为 20 tick，周期为10次调度即 200 tick，其他类推）（time_capacity 设置为 -1 表示该任务永不结束）：
+- thread1: period = 200, time_capacity = 40
+- thread2: period = 200, time_capacity = 80
+- thread3: time_capacity = -1
+
+多级队列设置为（单位为调度时间片）：
+- list0: time_slice = 1, time_allotment = 2
+- list1: time_slice = 2, time_allotment = 4
+- list2: time_slice = 4, time_allotment = --
+
+运行结果如下：
+```
+POK kernel initialized
+Thread 0.0 scheduled at 20
+    SCHED_INFO: sched_time: 0 - 1, thread_id: 0, time_cap: -1, remain_cap: -1, state: 0
+SQY@pok_sched_part_mlfq trace: 700, ready for queue moving. 
+SQY@pok_sched_part_mlfq q_id: 0, queue: 1 - 2 - 3 - 0 - 
+SQY@pok_sched_part_mlfq q_id: 1, queue: 
+SQY@pok_sched_part_mlfq q_id: 2, queue: 
+SQY@pok_sched_part_mlfq trace: 743
+SQY@pok_sched_part_mlfq q_id: 0, queue: 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+Thread 0.1 scheduled at 47
+    SCHED_INFO: sched_time: 1 - 2, thread_id: 1, time_cap: 40, remain_cap: 40, state: 1
+Thread 0.1 running at 60
+SQY@pok_sched_part_mlfq trace: 700, ready for queue moving. 
+SQY@pok_sched_part_mlfq q_id: 0, queue: 2 - 3 - 0 - 1 - 
+SQY@pok_sched_part_mlfq q_id: 1, queue: 
+SQY@pok_sched_part_mlfq q_id: 2, queue: 
+SQY@pok_sched_part_mlfq trace: 743
+SQY@pok_sched_part_mlfq q_id: 0, queue: 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+    other ready:  1 (0)elected 2 !!! 
+, 3 (0)
+    non-ready: 0 (1/stopped)
+Thread 0.2 scheduled at 60
+    SCHED_INFO: sched_time: 2 - 3, thread_id: 2, time_cap: 80, remain_cap: 80, state: 1
+Thread 0.2 running at 80
+SQY@pok_sched_part_mlfq trace: 700, ready for queue moving. 
+SQY@pok_sched_part_mlfq q_id: 0, queue: 3 - 0 - 1 - 2 - 
+SQY@pok_sched_part_mlfq q_id: 1, queue: 
+SQY@pok_sched_part_mlfq q_id: 2, queue: 
+SQY@pok_sched_part_mlfq trace: 743
+SQY@pok_sched_part_mlfq q_id: 0, queue: 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+    other ready:  1 (0), 2 (0)elected 3 !!! 
+
+    non-ready: 0 (1/stopped)
+Thread 0.3 scheduled at 80
+    SCHED_INFO: sched_time: 3 - 4, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_mlfq trace: 700, ready for queue moving. 
+SQY@pok_sched_part_mlfq q_id: 0, queue: 0 - 1 - 2 - 3 - 
+SQY@pok_sched_part_mlfq q_id: 1, queue: 
+SQY@pok_sched_part_mlfq q_id: 2, queue: 
+SQY@pok_sched_part_mlfq trace: 743
+SQY@pok_sched_part_mlfq q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+Thread 0.1 scheduled at 100
+    SCHED_INFO: sched_time: 4 - 5, thread_id: 1, time_cap: 40, remain_cap: 20, state: 1
+Thread 0.1 running at 120
+Thread 0.1 finished at 120, next activation: 200
+SQY@pok_sched_part_mlfq trace: 700, ready for queue moving. 
+SQY@pok_sched_part_mlfq q_id: 0, queue: 0 - 2 - 3 - 
+SQY@pok_sched_part_mlfq q_id: 1, queue: 1 - 
+SQY@pok_sched_part_mlfq q_id: 2, queue: 
+SQY@pok_sched_part_mlfq trace: 743
+SQY@pok_sched_part_mlfq q_id: 0, queue: 0 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+elected 2 !!! 
+    other ready:  3 (0)
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+Thread 0.2 scheduled at 120
+    SCHED_INFO: sched_time: 5 - 6, thread_id: 2, time_cap: 80, remain_cap: 60, state: 1
+Thread 0.2 running at 140
+SQY@pok_sched_part_mlfq trace: 700, ready for queue moving. 
+SQY@pok_sched_part_mlfq q_id: 0, queue: 0 - 3 - 
+SQY@pok_sched_part_mlfq q_id: 1, queue: 1 - 2 - 
+SQY@pok_sched_part_mlfq q_id: 2, queue: 
+SQY@pok_sched_part_mlfq trace: 743
+SQY@pok_sched_part_mlfq q_id: 0, queue: 0 - 3 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 3 (priority 0)
+    other ready:  2 (0)elected 3 !!! 
+
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+Thread 0.3 scheduled at 140
+    SCHED_INFO: sched_time: 6 - 7, thread_id: 3, time_cap: -1, remain_cap: -1, state: 1
+SQY@pok_sched_part_mlfq trace: 700, ready for queue moving. 
+SQY@pok_sched_part_mlfq q_id: 0, queue: 0 - 
+SQY@pok_sched_part_mlfq q_id: 1, queue: 1 - 2 - 3 - 
+SQY@pok_sched_part_mlfq q_id: 2, queue: 
+SQY@pok_sched_part_mlfq trace: 743
+SQY@pok_sched_part_mlfq q_id: 0, queue: 0 - 
+SQY@pok_sched_part_mlfq q_id: 1, queue: 1 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+elected 2 !!! 
+    other ready:  3 (0)
+    non-ready: 0 (1/stopped), 1 (0/waiting next activation)
+Thread 0.2 scheduled at 160
+    SCHED_INFO: sched_time: 7 - 8, thread_id: 2, time_cap: 80, remain_cap: 40, state: 1
+Thread 0.2 running at 180
+SQY@pok_sched_part_mlfq trace: 700, ready for queue moving. 
+SQY@pok_sched_part_mlfq q_id: 0, queue: 0 - 
+SQY@pok_sched_part_mlfq q_id: 1, queue: 1 - 2 - 3 - 
+SQY@pok_sched_part_mlfq q_id: 2, queue: 
+SQY@pok_sched_part_mlfq trace: 743
+SQY@pok_sched_part_mlfq q_id: 0, queue: 0 - 
+SQY@pok_sched_part_mlfq q_id: 1, queue: 1 - 2 - 
+    SCHED_INFO: sched_time: 8 - 9, thread_id: 2, time_cap: 80, remain_cap: 20, state: 1
+Thread 0.2 running at 200
+Thread 0.2 finished at 200, next activation: 200
+SQY@pok_sched_part_mlfq trace: 700, ready for queue moving. 
+SQY@pok_sched_part_mlfq q_id: 0, queue: 0 - 1 - 
+SQY@pok_sched_part_mlfq q_id: 1, queue: 3 - 2 - 
+SQY@pok_sched_part_mlfq q_id: 2, queue: 
+SQY@pok_sched_part_mlfq trace: 743
+SQY@pok_sched_part_mlfq q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  3 (0)
+    non-ready: 0 (1/stopped), 2 (0/waiting next activation)
+Thread 0.1 scheduled at 200
+    SCHED_INFO: sched_time: 9 - 10, thread_id: 1, time_cap: 40, remain_cap: 40, state: 1
+Thread 0.1 running at 220
+SQY@pok_sched_part_mlfq trace: 700, ready for queue moving. 
+SQY@pok_sched_part_mlfq q_id: 0, queue: 0 - 2 - 1 - 
+SQY@pok_sched_part_mlfq q_id: 1, queue: 3 - 
+SQY@pok_sched_part_mlfq q_id: 2, queue: 
+SQY@pok_sched_part_mlfq trace: 743
+SQY@pok_sched_part_mlfq q_id: 0, queue: 0 - 2 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 2 (priority 0)
+    other ready:  1 (0)elected 2 !!! 
+, 3 (0)
+    non-ready: 0 (1/stopped)
+Thread 0.2 scheduled at 220
+    SCHED_INFO: sched_time: 10 - 11, thread_id: 2, time_cap: 80, remain_cap: 80, state: 1
+Thread 0.2 running at 240
+SQY@pok_sched_part_mlfq trace: 700, ready for queue moving. 
+SQY@pok_sched_part_mlfq q_id: 0, queue: 0 - 1 - 2 - 
+SQY@pok_sched_part_mlfq q_id: 1, queue: 3 - 
+SQY@pok_sched_part_mlfq q_id: 2, queue: 
+SQY@pok_sched_part_mlfq trace: 743
+SQY@pok_sched_part_mlfq q_id: 0, queue: 0 - 1 - 
+--- scheduling partition: 0, low:0, high:4
+--- Scheduling processor: 0
+    scheduling thread 1 (priority 0)
+elected 1 !!! 
+    other ready:  2 (0), 3 (0)
+    non-ready: 0 (1/stopped)
+...
+
+
+```
+
+可以看到我们在每次调度时输出了各队列中任务的情况，以及选取队列中满足调度条件的任务的过程。我们的输出结果与图中分析的调度过程完全一致（这里只展示了前期的部分，完整请参考`output.log.txt`），可认为在一般情况下实现正确。
+
