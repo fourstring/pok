@@ -64,10 +64,6 @@ pok_ret_t pok_lockobj_init() {
     pok_partitions_lockobjs[i].spin = 0;
     pok_partitions_lockobjs[i].current_value = 1;
     pok_partitions_lockobjs[i].initialized = FALSE;
-#if defined (POK_NEEDS_PRIO_CEILING)
-    printf("[DEBUG] set lock obj %u ceiling_value to %u\n", i, pok_lockobjs_ceiling_values[i]);
-    pok_partitions_lockobjs[i].ceiling_value = pok_lockobjs_ceiling_values[i];
-#endif
   }
 #endif
   return POK_ERRNO_OK;
@@ -157,6 +153,11 @@ pok_ret_t pok_lockobj_partition_create(pok_lockobj_id_t *id,
   if (ret != POK_ERRNO_OK) {
     return ret;
   }
+
+#if defined (POK_NEEDS_PRIO_CEILING)
+  printf("[DEBUG] set lock obj %u ceiling_value to %u\n", mid, pok_lockobjs_ceiling_values[mid]);
+  pok_partitions_lockobjs[mid].ceiling_value = pok_lockobjs_ceiling_values[mid];
+#endif
 
   return POK_ERRNO_OK;
 }
@@ -257,7 +258,7 @@ pok_ret_t pok_lockobj_eventbroadcast(pok_lockobj_t *obj) {
 
 #if defined (POK_NEEDS_PRIO_CEILING)
 static void pok_lockobj_ceil_current_thread(pok_lockobj_t *obj) {
-  pok_threads[POK_SCHED_CURRENT_THREAD].priority = 100;
+  pok_threads[POK_SCHED_CURRENT_THREAD].priority = obj->ceiling_value;
   printf("[DEBUG] ceil priority of thread %u to %u, original=%u\n", POK_SCHED_CURRENT_THREAD, obj->ceiling_value, pok_threads[POK_SCHED_CURRENT_THREAD].base_priority);
 }
 
