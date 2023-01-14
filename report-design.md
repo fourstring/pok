@@ -318,7 +318,136 @@ MLFQ 算法总结下来遵循以下 6 条规则：
 
 ### 3.2 使用 Python 实现的 MLFQ 算法模拟简述
 
+我们使用Python实现了MLFQ调度算法，在源码目录`/mlfq_python_impl`下。我们的实现基于开源的调度模拟器框架，该框架与单核简单模拟相比，较为完备，它能够模拟多核调度，并能模拟线程间因共享资源（如内存、I/O均抽象为系统资源，最多支持三类）导致的CPU空闲，能统计总的CPU时间和CPU利用率。我们为其增加了MLFQ调度策略并进行了简单测试。
 
+具体而言，代码实现主要是两部分。一部分是调度策略函数，负责下一个被调度任务的选取，之后创建线程模拟执行消耗CPU时间，在`/mlfq_python_impl/schedulers.py`中，如下所示：
+
+```python
+def multilevel_feedback_queue(tasks_count, queues_number, queues_time_quantum, queue_time_slice):
+    queues = []
+    for i in range(queues_number):
+        queues.append([])
+    queues[0] = globals.ready
+    queue_index = 0
+    threads = []
+    tasks = globals.ready.copy()
+    counter = 0
+    while globals.get_done_tasks_count(tasks) < tasks_count:
+        isDone = True
+        if len(globals.waiting) > 0:
+            task, queue_index = globals.waiting[0]
+            isDone = False
+        else:
+            for i in range(queues_number):
+                if len(queues[i]) > 0:
+                    task = queues[i][0]
+                    queue_index = i
+                    isDone = False
+                    break
+        counter += 1
+        if not isDone:
+            if hasEnoughResources(task, globals.resources):
+                while(not task.get_isAssigned()):
+                    for core in globals.cpu_cores:
+                        if core.get_state() == 'idle':
+                            core.set_state('busy')
+                            core.set_running_task(task)
+
+                            next_level_queue_indx = min(queue_index+1, queues_number-1)
+                            current_state = 'queue ' + str(queue_index)
+                            next_state = 'queue ' + str(next_level_queue_indx)
+                            th = Thread(target=core.process_task, args=(task, globals.resources, globals.cpu_cores, \
+                                queues_time_quantum[queue_index], queue_time_slice[queue_index],queues[next_level_queue_indx], next_state, queues[queue_index], current_state))
+                            task.set_isAssigned(True)
+
+                            isWaiting = True
+                            for i in range(queues_number):
+                                if task in queues[i]:
+                                    queues[i].pop(0)
+                                    isWaiting = False
+                            if isWaiting:
+                                globals.waiting.pop(0)
+                            th.start()
+                            threads.append(th)
+                            break
+            else:
+                isWaiting = True
+                for i in range(queues_number):
+                    if task in queues[i]:
+                        queues[i].pop(0)
+                        isWaiting = False
+                if isWaiting:
+                    globals.waiting.pop(0)
+
+                globals.waiting.append((task, queue_index))
+
+    globals.join_threads(threads)
+    globals.print_cpu_cores_consumed_time(globals.cpu_cores)
+    exit(0)
+```
+
+我们考虑是否存在先前因资源争用等待的任务，如果没有，则选择最高优先级的非空队列中任务作为下一个调度对象。当它满足其他调度条件时，并创建任务线程，将其从队列中移除。
+
+下面将展示任务线程的过程，在`cpuCore.py`中：
+
+```python
+    def process_task(self, task, resources, cpu_cores, time_quantum=None, time_slice=None,      queue=None, state='ready', origin_queue=None, origin_state='queue 0'):
+
+        task.set_state('running')
+        task.allocate_resources(resources)
+
+        # indicates the selected scheduler
+        # algorithm is non-preemptive
+        if time_quantum == None:
+            for _ in range(task.duration):
+                time.sleep(1)
+                # print_system_status(cpu_cores, resources)
+                task.increment_cpu_time()
+                self.idle_time += 1
+                globals.increment_system_total_time()
+
+            task.set_state('done')
+            task.free_resources(resources)
+
+        else:
+            remain_time = task.duration - task.cpu_time
+            for _ in range(min(remain_time, time_slice)):
+                time.sleep(1)
+                # print_system_status(cpu_cores, resources)
+                task.increment_cpu_time()
+                task.queue_time += 1
+                self.idle_time += 1
+                globals.increment_system_total_time()
+
+            task.free_resources(resources)
+            if task.cpu_time == task.duration:
+                task.set_state('done')
+
+            else:
+                if task.queue_time == time_quantum:
+                    task.queue_time = 0
+                    task.set_state(state)
+                    task.set_isAssigned(False)
+                    with globals.task_mutex:
+                        queue.append(task)
+                else:
+                    task.set_state(origin_state)
+                    task.set_isAssigned(False)
+                    with globals.task_mutex:
+                        origin_queue.append(task)
+
+        print()
+        globals.task_mutex.acquire(blocking=False)
+        globals.resource_mutex.acquire(blocking=False)
+        print(colored('Task ' + task.name + ' current cputime: ', 'yellow')+ str(task.cpu_time) \
+            + '\n' + colored('Task ' + task.name + ' current state: ' , 'yellow')+ task.state)
+        globals.task_mutex.release()
+        globals.resource_mutex.release()
+        self.set_state('idle')
+        self.set_running_task(None)
+```
+
+该线程会计算执行时间，并sleep需要的执行时间，模拟CPU计算用时。在执行完成后，根据MLFQ的要求重新加入指定的多级调度队列。
 
 ### 3.3 在 POK 中支持 MLFQ 调度策略
 

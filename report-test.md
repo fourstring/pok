@@ -324,6 +324,61 @@ Thread 0.3 running at 5320
 
 ### 3.1 使用 Python 实现的 MLFQ 算法模拟简述
 
+我们运行并测试了Python算法模拟，程序开始运行时会首先获取用户对系统资源、任务、CPU数、多级队列的配置信息。完整的一次程序运行示例如下：
+
+```
+➜ python3 main.py
+Tell me about the number of each resource:
+    A > 1
+    B > 1
+    C > 1
+How many tasks do exist? 3
+    > t1 X 2
+    > t2 X 4
+    > t3 X 10
+How many cpu cores do exist? 1
+Please enter the number of the queues: 3
+Respectively, enter time quantum associated with each queue: 2 4 8
+Respectively, enter time slice(rr budget) associated with each queue: 1 2 4
+
+Task t1 current cputime: 1
+Task t1 current state: queue 0
+
+Task t2 current cputime: 1
+Task t2 current state: queue 0
+
+Task t3 current cputime: 1
+Task t3 current state: queue 0
+
+Task t1 current cputime: 2
+Task t1 current state: done
+
+Task t2 current cputime: 2
+Task t2 current state: queue 1
+
+Task t3 current cputime: 2
+Task t3 current state: queue 1
+
+Task t2 current cputime: 4
+Task t2 current state: done
+
+Task t3 current cputime: 4
+Task t3 current state: queue 1
+
+Task t3 current cputime: 6
+Task t3 current state: queue 2
+
+Task t3 current cputime: 10
+Task t3 current state: done
+
+.: CPU Cores Status :.
+core 1: 16 secs!
+Total CPU time: 16 secs!
+
+```
+
+可以看到任务初始时都在最高优先级，队列内以RR进行调度，轮转时间片为用户设置的每个队列对应的`time slice(rr budget)`，当任务运行时间达到所处队列的最长运行时间`time quantum`时，会进入低优先级队列。
+
 ### 3.2 在 POK 中支持 MLFQ 调度策略
 
 我们用示例场景测试了调度实现的正确性，该示例与设计报告中相同。我们认为该示例能体现调度效果，即保证短任务的优先执行以达到较短的周转时间，按时提高所有任务优先级以应对任务类型的动态变化：
