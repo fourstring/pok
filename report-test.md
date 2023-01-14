@@ -226,6 +226,52 @@ P1T1: now 8912016519 ns, 8 s
 
 ### RR和WRR调度
 
+POK支持通过在`de`中配置slot来实现对partition的RR和Weighted RR调度。
+
+通过为三个partition配置相同比例的slot，可以实现RR调度。
+```
+#define POK_CONFIG_SCHEDULING_SLOTS {1000,1000,1000}
+#define POK_CONFIG_SCHEDULING_SLOTS_ALLOCATION {0,1,2}
+#define POK_CONFIG_SCHEDULING_NBSLOTS 3
+```
+具体的调度结果如下所示，依次调度了P2、P3和P1：
+
+```
+P2T1: now 11000009391 ns, 11 s
+P3T1: now 11500020294 ns, 11 s
+P1T1: now 12000031197 ns, 12 s
+P2T1: now 12500023662 ns, 12 s
+P3T1: now 13000034565 ns, 13 s
+P1T1: now 13500027030 ns, 13 s
+P2T1: now 14000019495 ns, 14 s
+P3T1: now 14500039617 ns, 14 s
+P1T1: now 15000022863 ns, 15 s
+...
+```
+
+通过将P1、P2和P3的slot设置为1：2：3的比例，可以实现Weighted RR的调度。
+
+```
+#define POK_CONFIG_SCHEDULING_SLOTS {1000,1000,1000,1000,1000,1000}
+#define POK_CONFIG_SCHEDULING_SLOTS_ALLOCATION {2,1,0,2,1,2}
+#define POK_CONFIG_SCHEDULING_NBSLOTS 6
+```
+
+具体的调度结果如下所示，依次调度了P3、P2、P1、P3、P2、P3：
+
+```
+P3T1: now 1500032709 ns, 1 s
+P2T1: now 2000034393 ns, 2 s
+P1T1: now 2500072953 ns, 2 s
+P3T1: now 3000019323 ns, 3 s
+P2T1: now 3500030226 ns, 3 s
+P3T1: now 4000041129 ns, 4 s
+P3T1: now 4500015156 ns, 4 s
+P2T1: now 5000016840 ns, 5 s
+P1T1: now 5500027743 ns, 5 s
+P3T1: now 6000038646 ns, 6 s
+...
+```
 ## 多线程调度
 
 ### 抢占式优先级调度
