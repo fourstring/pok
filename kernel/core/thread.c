@@ -45,6 +45,8 @@ extern uint64_t partition_processor_affinity[];
 
 extern pok_partition_t pok_partitions[POK_CONFIG_NB_PARTITIONS];
 
+extern feedback_queue_t mlfq[POK_CONFIG_NB_PROCESSORS][QUEUE_NUM];
+
 #ifdef POK_NEEDS_SCHED_RMS
 
 /**
@@ -116,6 +118,7 @@ void pok_thread_init(void) {
     pok_threads[i].next_activation = 0;
     pok_threads[i].rr_budget = POK_LAB_SCHED_RR_BUDGET;
     pok_threads[i].weight = 1;
+    pok_threads[i].tick = 0;
     pok_threads[i].wakeup_time = 0;
     pok_threads[i].state = POK_STATE_STOPPED;
     pok_threads[i].processor_affinity = 0;
@@ -133,6 +136,7 @@ pok_ret_t pok_partition_thread_create(uint32_t *thread_id,
                                       const pok_thread_attr_t *attr,
                                       const uint8_t partition_id) {
   uint32_t stack_vaddr;
+  uint8_t proc_id;
   /**
    * We can create a thread only if the partition is in INIT mode
    */
@@ -216,6 +220,9 @@ pok_ret_t pok_partition_thread_create(uint32_t *thread_id,
   pok_threads[id].entry = attr->entry;
   pok_threads[id].init_stack_addr = stack_vaddr;
   pok_threads[id].state = POK_STATE_RUNNABLE;
+  proc_id = pok_threads[id].processor_affinity;
+  list_append(&(pok_threads[id].queue_node), &(mlfq[proc_id][0].list));
+  pok_threads[id].queue_id = 0;
   *thread_id = id;
 
 #ifdef POK_NEEDS_SCHED_RMS

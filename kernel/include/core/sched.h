@@ -17,6 +17,7 @@
 
 #include <core/multiprocessing.h>
 #include <core/schedvalues.h>
+#include <common/list.h>
 #include <errno.h>
 #include <types.h>
 
@@ -31,6 +32,19 @@ extern uint32_t current_threads[POK_CONFIG_NB_PROCESSORS];
 #ifndef POK_LAB_SCHED_RR_BUDGET
 #define POK_LAB_SCHED_RR_BUDGET 1
 #endif /* POK_LAB_SCHED_RR_BUDGET */
+
+#if !defined(QUEUE_NUM) || !defined(QUEUE_TIME_SLICE) || !defined(QUEUE_TIME_ALLOTMENT) || !defined(BOOST_INTERVAL)
+#define QUEUE_NUM               3
+#define QUEUE_TIME_SLICE        { 1, 2, 4 }
+#define QUEUE_TIME_ALLOTMENT    { 2, 4, 8 }
+#define BOOST_INTERVAL          30
+#endif
+
+typedef struct {
+    uint64_t time_slice;
+    uint64_t time_allotment;
+    struct list_head list;
+} feedback_queue_t;
 
 typedef enum {
   POK_STATE_STOPPED = 0,
@@ -72,6 +86,15 @@ uint32_t pok_sched_part_prio(const uint32_t, const uint32_t,
 uint32_t pok_sched_part_edf(const uint32_t, const uint32_t, 
                                 const uint32_t prev_thread,
                                 const uint32_t current_thread);
+uint32_t pok_sched_part_real_rr(const uint32_t, const uint32_t,
+                           const uint32_t prev_thread,
+                           const uint32_t current_thread);
+uint32_t pok_sched_part_wrr(const uint32_t, const uint32_t,
+                           const uint32_t prev_thread,
+                           const uint32_t current_thread);
+uint32_t pok_sched_part_mlfq(const uint32_t, const uint32_t,
+                           const uint32_t prev_thread,
+                           const uint32_t current_thread);
 
 /* Context switch functions */
 void pok_global_sched_context_switch(const uint32_t elected_id,

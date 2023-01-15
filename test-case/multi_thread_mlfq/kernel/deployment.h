@@ -9,7 +9,6 @@
 #define POK_NEEDS_TIME 1
 #define POK_NEEDS_CONSOLE 1
 #define POK_NEEDS_LOCKOBJECTS 1
-#define POK_NEEDS_DEBUG_THREAD_RR 1
 
 #define POK_CONFIG_NB_PROCESSORS 1
 #define POK_CONFIG_NB_THREADS 6
@@ -39,4 +38,4 @@
 
 #include <core/schedvalues.h>
 #define POK_CONFIG_PARTITIONS_SCHEDULER \
-    { POK_SCHED_WRR }
+    { POK_SCHED_MLFQ }
