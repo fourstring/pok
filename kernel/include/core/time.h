@@ -27,7 +27,11 @@
  * POK timer quantum in Hz. Delays and scheduling will be restricted to this
  * precision.
  */
-#define POK_TIMER_QUANTUM 2
+#if defined(POK_CONFIG_TIMER_QUANTUM)
+#define POK_TIMER_QUANTUM POK_CONFIG_TIMER_QUANTUM
+#else
+#define POK_TIMER_QUANTUM 1000
+#endif
 
 extern volatile uint64_t pok_tick_counter;
 

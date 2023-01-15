@@ -15,6 +15,8 @@
 #define POK_CONFIG_NB_THREADS 6
 #define POK_CONFIG_NB_LOCKOBJECTS 0
 #define POK_CONFIG_NB_PARTITIONS 1
+#define POK_NEEDS_DEBUG_THREAD_PRIO 1
+#define POK_CONFIG_SCHED_BY_TICK 1
 
 #define POK_CONFIG_PROCESSOR_AFFINITY                                          \
     { 1, 1 }

@@ -95,13 +95,13 @@ extern int spinlocks[POK_CONFIG_NB_PROCESSORS];
 void pok_sched_thread_switch(void);
 
 #if defined (POK_NEEDS_DEBUG_THREAD_RR)
-#define debug_rr(format, ...) printf("[DEBUG] %s,%d: " format, __func__, __LINE__, ##__VA_ARGS__)
+#define debug_rr(format, ...) printf(format, ##__VA_ARGS__)
 #else
 #define debug_rr(...)
 #endif
 
 #if defined (POK_NEEDS_DEBUG_THREAD_PRIO)
-#define debug_prio(format, ...) printf("[DEBUG] %s,%d: " format, __func__, __LINE__, ##__VA_ARGS__)
+#define debug_prio(format, ...) printf(format, ##__VA_ARGS__)
 #else
 #define debug_prio(...)
 #endif
