@@ -328,7 +328,7 @@ def gen_kernel_deployment_h(fd, config):
             needs.add(need)
     for (opt, need) in [("assert", "ASSERT"),("debug", "DEBUG"),
                         ("debug_rr","DEBUG_THREAD_RR"),("debug_prio","DEBUG_THREAD_PRIO"),
-                        ("debug_part","DEBUG_PART_PRIO")]:
+                        ("debug_part","DEBUG_PART_PRIO"), ("debug_mlfq", "DEBUG_THREAD_MLFQ")]:
         if has_feature(config, "kernel.{}".format(opt)):
             needs.add(need)
     configs["PARTITIONS_SIZE"] = c_list(option_value(config, "partitions.size", decode=to_bytes))
