@@ -1002,3 +1002,7 @@ pok_ret_t pok_lockobj_unlock(pok_lockobj_t *obj,
 ```
 
 需要注意，一个mutex在上锁时可能有两条得锁路径，即立即得锁或休眠后唤醒得锁，对这两条路径，我们均添加了对`pok_lockobj_ceil_current_thread` hook的调用。
+
+## 贡献度
+
+小组成员贡献度均等。
